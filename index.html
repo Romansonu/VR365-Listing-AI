@@ -429,6 +429,38 @@ footer {
 @media(max-width: 900px) { .fs-grid { grid-template-columns: repeat(4,1fr); } }
 @media(max-width: 600px) { .fs-grid { grid-template-columns: repeat(2,1fr); } }
 
+
+/* OTA SELECTOR */
+.ota-selector {
+  max-width: 660px; margin: 0 auto 16px;
+  background: white; border: 1px solid var(--border-light);
+  border-radius: 12px; overflow: hidden;
+}
+.ota-sel-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 1px; background: rgba(0,0,0,0.06); padding: 0;
+}
+.ota-sel-item {
+  background: white; padding: 10px 12px;
+  cursor: pointer; transition: all 0.15s;
+  font-size: 0.78rem; font-weight: 500; color: var(--mid-gray);
+  display: flex; align-items: center; gap: 6px;
+  position: relative;
+}
+.ota-sel-item:hover { background: #fafafa; color: var(--ink); }
+.ota-sel-item.active { background: #fffdf5; color: var(--ink); font-weight: 600; }
+.ota-sel-item.active::after {
+  content: '✓'; position: absolute; top: 4px; right: 6px;
+  font-size: 0.6rem; font-weight: 900; color: var(--gold);
+}
+.ota-sel-limit {
+  margin-left: auto; font-size: 0.62rem; font-weight: 700;
+  padding: 1px 5px; border-radius: 8px;
+  background: rgba(0,0,0,0.05); color: var(--mid-gray);
+}
+.ota-sel-item.active .ota-sel-limit { background: rgba(201,168,76,0.15); color: var(--gold); }
+@media(max-width:600px) { .ota-sel-grid { grid-template-columns: repeat(2,1fr); } }
+
 /* ── SCROLL REVEAL ── */
 .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
@@ -1077,6 +1109,39 @@ footer {
       </div>
     </div>
 
+    <!-- OTA PLATFORM SELECTOR (shows only when OTA is selected) -->
+    <div class="ota-selector" id="otaSelector" style="display:none;">
+      <div class="fs-label" style="padding:14px 20px 10px;">Which platforms?</div>
+      <div class="ota-sel-grid" id="otaSelGrid">
+        <div class="ota-sel-item" onclick="toggleOTA(this,'Airbnb')" data-ota="Airbnb"><span>🏠</span> Airbnb <span class="ota-sel-limit">50</span></div>
+        <div class="ota-sel-item" onclick="toggleOTA(this,'VRBO')" data-ota="VRBO"><span>🌴</span> VRBO <span class="ota-sel-limit">75</span></div>
+        <div class="ota-sel-item" onclick="toggleOTA(this,'Booking.com')" data-ota="Booking.com"><span>🔵</span> Booking.com <span class="ota-sel-limit">60</span></div>
+        <div class="ota-sel-item" onclick="toggleOTA(this,'TripAdvisor')" data-ota="TripAdvisor"><span>🦉</span> TripAdvisor <span class="ota-sel-limit">80</span></div>
+        <div class="ota-sel-item" onclick="toggleOTA(this,'Google Vacation Rentals')" data-ota="Google Vacation Rentals"><span>🔍</span> Google VR <span class="ota-sel-limit">100</span></div>
+        <div class="ota-sel-item" onclick="toggleOTA(this,'Hipcamp')" data-ota="Hipcamp"><span>🏕️</span> Hipcamp <span class="ota-sel-limit">60</span></div>
+        <div class="ota-sel-item" onclick="toggleOTA(this,'Expedia')" data-ota="Expedia"><span>🏨</span> Expedia <span class="ota-sel-limit">120</span></div>
+        <div class="ota-sel-item" onclick="toggleOTA(this,'Hotels.com')" data-ota="Hotels.com"><span>🏩</span> Hotels.com <span class="ota-sel-limit">100</span></div>
+        <div class="ota-sel-item" onclick="toggleOTA(this,'Agoda')" data-ota="Agoda"><span>🌐</span> Agoda <span class="ota-sel-limit">80</span></div>
+        <div class="ota-sel-item" onclick="toggleOTA(this,'Kayak')" data-ota="Kayak"><span>🔎</span> Kayak <span class="ota-sel-limit">90</span></div>
+        <div class="ota-sel-item" onclick="toggleOTA(this,'Homes & Villas by Marriott')" data-ota="Homes & Villas by Marriott"><span>🏅</span> Marriott <span class="ota-sel-limit">100</span></div>
+        <div class="ota-sel-item" onclick="toggleOTA(this,'Plum Guide')" data-ota="Plum Guide"><span>✨</span> Plum Guide <span class="ota-sel-limit">60</span></div>
+        <div class="ota-sel-item" onclick="toggleOTA(this,'Houfy')" data-ota="Houfy"><span>🏡</span> Houfy <span class="ota-sel-limit">75</span></div>
+        <div class="ota-sel-item" onclick="toggleOTA(this,'Vacasa')" data-ota="Vacasa"><span>🏘️</span> Vacasa <span class="ota-sel-limit">80</span></div>
+        <div class="ota-sel-item" onclick="toggleOTA(this,'Evolve')" data-ota="Evolve"><span>🔑</span> Evolve <span class="ota-sel-limit">75</span></div>
+        <div class="ota-sel-item" onclick="toggleOTA(this,'Furnished Finder')" data-ota="Furnished Finder"><span>🛋️</span> Furnished Finder <span class="ota-sel-limit">80</span></div>
+        <div class="ota-sel-item" onclick="toggleOTA(this,'Glamping Hub')" data-ota="Glamping Hub"><span>⛺</span> Glamping Hub <span class="ota-sel-limit">60</span></div>
+        <div class="ota-sel-item" onclick="toggleOTA(this,'Misterb&b')" data-ota="Misterb&b"><span>🌈</span> Misterb&b <span class="ota-sel-limit">75</span></div>
+      </div>
+      <div class="fs-footer">
+        <div class="fs-selected-count" id="otaCount">0 of 18 selected</div>
+        <div class="fs-shortcuts">
+          <button onclick="selectAllOTAs()">All</button>
+          <button onclick="selectPopularOTAs()">Popular 4</button>
+          <button onclick="clearOTAs()">Clear</button>
+        </div>
+      </div>
+    </div>
+
     <button id="analyzeBtn" class="analyze-main-btn" onclick="analyzeListing()">Select features above to generate →</button>
     <div class="hint" style="margin-top:12px;">Works with <span>Airbnb</span> <span>VRBO</span> <span>Zillow</span> <span>Realtor.com</span> <span>Any URL</span></div>
   </div>
@@ -1358,383 +1423,187 @@ function updateStepsForSelection() {
 
 // ─── API CALL ─────────────────────────────────────────────────────────────────
 async function fetchAllData(url) {
+  const hasPhotos = uploadedPhotos.length > 0;
+  const photoNote = hasPhotos ? `The user has uploaded ${uploadedPhotos.length} real property photos.` : '';
+
+  const sectionsNeeded = [];
+  if (wantOTA) sectionsNeeded.push('otas');
+  if (wantPhotos) sectionsNeeded.push('photos');
+  if (wantSocial) sectionsNeeded.push('social');
+  if (wantPricing) sectionsNeeded.push('pricing');
+  if (wantRules) sectionsNeeded.push('rules');
+  if (wantSEO) sectionsNeeded.push('seo');
+  if (wantMarket) sectionsNeeded.push('market');
+
   setStep(0); await sleep(500);
   if (wantPhotos) { setStep(1); await sleep(400); }
   if (wantPricing) { setStep(2); await sleep(400); }
   if (wantOTA) { setStep(3); await sleep(300); }
 
-  const hasPhotos = uploadedPhotos.length > 0;
-  const photoNote = hasPhotos ? `The user has uploaded ${uploadedPhotos.length} real property photos. Describe them as actual rooms based on typical vacation rental photography.` : '';
-
-
-
-  // Build dynamic prompt based on selected features
-  const sectionsNeeded = [];
-  if (wantOTA) sectionsNeeded.push('otas array (all 18 platforms with headlines and descriptions)');
-  if (wantPhotos) sectionsNeeded.push('photos array (room-by-room descriptions)');
-  if (wantSocial) sectionsNeeded.push('social array (Instagram, Facebook, TikTok, Twitter)');
-  if (wantPricing) sectionsNeeded.push('pricing object (nightly rates per platform)');
-  if (wantRules) sectionsNeeded.push('rules object (house rules and FAQ)');
-  if (wantSEO) sectionsNeeded.push('seo object (keywords and meta tags)');
-  if (wantMarket) sectionsNeeded.push('market object (competitor pricing, seasonal rates, occasion pricing, weekly/monthly suggestions)');
-
-  const prompt = `You are an expert vacation rental and real estate copywriter with deep knowledge of every major OTA platform's exact character limits and search algorithms.
-ONLY generate the sections requested. Omit any sections not listed below.
-REQUESTED SECTIONS: ${sectionsNeeded.join(', ')}
-
+  // Build property + non-OTA sections first
+  const mainPrompt = `You are an expert vacation rental copywriter. Analyze this property listing URL.
 URL: ${url || 'vacation rental property'}
 ${photoNote}
 
-CRITICAL — PLATFORM CHARACTER LIMITS YOU MUST STRICTLY FOLLOW:
-- Airbnb title: MAXIMUM 50 characters (count every character including spaces)
-- VRBO title: MAXIMUM 75 characters
-- Booking.com title: MAXIMUM 60 characters
-- TripAdvisor title: MAXIMUM 80 characters
-- Google Vacation Rentals title: MAXIMUM 100 characters
-- Hipcamp title: MAXIMUM 60 characters
+REQUESTED SECTIONS: ${sectionsNeeded.filter(s => s !== 'otas').join(', ')}
+${wantOTA ? 'Also include property info.' : ''}
 
-NEARBY LOCATION STRATEGY:
-Identify the city/region from the URL or property details. Then use nearby landmarks, attractions, neighborhoods, beaches, mountains, parks, restaurants, entertainment districts, airports, or well-known local areas to make headlines more searchable and compelling. Guests search for locations, not just property features. Example: if in Miami, reference "South Beach", "Wynwood", "Brickell" etc. If in the mountains, reference nearby ski resorts, trails, lakes. WEAVE these local hooks into the headlines naturally.
+NEARBY LOCATION STRATEGY: Identify the city/region and use real local landmarks in all copy.
 
-For each platform write the most compelling headline possible that:
-1. Uses nearby location/attraction keywords guests actually search for
-2. Highlights the single strongest property feature
-3. NEVER exceeds the character limit — verify character count before returning
-4. Matches that platform's specific tone and search behavior
-
-Return ONLY valid JSON (no markdown, no backticks):
-
+Return ONLY valid JSON with these sections:
 {
   "property": {
-    "title": "Evocative property name",
+    "title": "Property name",
     "address": "City, State",
     "type": "Property type",
     "bedrooms": 3,
     "bathrooms": 2,
     "guests": 6,
     "sqft": 1800,
-    "highlights": ["highlight1","highlight2","highlight3","highlight4","highlight5"],
-    "nearbyAttractions": ["attraction1","attraction2","attraction3","attraction4","attraction5"]
-  },
-  "otas": [
-    {
-      "platform": "Airbnb",
-      "icon": "🏠",
-      "colorClass": "airbnb",
-      "charLimit": 50,
-      "headline": "MUST BE 50 CHARS OR LESS. Warm, experience-driven. Use nearby landmark. Example: 'Beachfront Gem · Steps to Pier · Sleeps 6'",
-      "headlineCharCount": 42,
-      "shortDesc": "2-sentence hook matching Airbnb's warm community tone. Reference local neighborhood or attraction.",
-      "fullBody": "Full 4-5 sentence Airbnb listing. Warm story-driven tone. Mention neighborhood, nearby attractions, what guests will experience.",
-      "tags": ["Entire home","Self check-in","Great location"]
-    },
-    {
-      "platform": "VRBO",
-      "icon": "🌴",
-      "colorClass": "vrbo",
-      "charLimit": 75,
-      "headline": "MUST BE 75 CHARS OR LESS. Family-vacation focused. Use nearby destination or landmark.",
-      "headlineCharCount": 68,
-      "shortDesc": "2-sentence family vacation hook. Reference nearby family attractions.",
-      "fullBody": "Full VRBO description 4-5 sentences. Family-focused, space, safety, group amenities, nearby kid-friendly spots.",
-      "tags": ["Family friendly","Full kitchen","Private yard"]
-    },
-    {
-      "platform": "Booking.com",
-      "icon": "🔵",
-      "colorClass": "booking",
-      "charLimit": 60,
-      "headline": "MUST BE 60 CHARS OR LESS. Amenity + location focused. Clear and factual.",
-      "headlineCharCount": 55,
-      "shortDesc": "2-sentence amenity-focused hook. Mention proximity to city center or transport.",
-      "fullBody": "Full Booking.com description 4-5 sentences. Factual, amenity-forward, check-in info, nearby transport/landmarks.",
-      "tags": ["Free WiFi","Kitchen","Parking"]
-    },
-    {
-      "platform": "TripAdvisor",
-      "icon": "🦉",
-      "colorClass": "tripadvisor",
-      "charLimit": 80,
-      "headline": "MUST BE 80 CHARS OR LESS. Experience and memory-making tone. Reference local experiences.",
-      "headlineCharCount": 74,
-      "shortDesc": "2-sentence experience hook. Reference local dining, culture, or adventure.",
-      "fullBody": "Full TripAdvisor 4-5 sentences. Experience tone, local gems nearby, what makes this destination special.",
-      "tags": ["Top rated","Unique experience","Local gems nearby"]
-    },
-    {
-      "platform": "Google Vacation Rentals",
-      "icon": "🔍",
-      "colorClass": "google",
-      "charLimit": 100,
-      "headline": "MUST BE 100 CHARS OR LESS. SEO-optimized, pack in location keywords and key amenities.",
-      "headlineCharCount": 92,
-      "shortDesc": "2-sentence search-optimized hook with high-value keywords.",
-      "fullBody": "Full description optimized for Google. Include location keywords, amenity keywords, neighborhood name.",
-      "tags": ["Entire property","Verified host","Instant book"]
-    },
-    {
-      "platform": "Hipcamp",
-      "icon": "🏕️",
-      "colorClass": "hipcamp",
-      "charLimit": 60,
-      "headline": "MUST BE 60 CHARS OR LESS. Nature, outdoor, escape-focused. Reference nearby outdoor attraction.",
-      "headlineCharCount": 54,
-      "shortDesc": "2-sentence outdoor/escape hook. Reference trail, lake, forest, or natural feature nearby.",
-      "fullBody": "Full Hipcamp description. Nature-escape tone, outdoor activities nearby, stargazing, hiking, wildlife.",
-      "tags": ["Nature retreat","Outdoor dining","Stargazing"]
-,
-    {
-      "platform": "Expedia",
-      "icon": "🏨",
-      "colorClass": "expedia",
-      "charLimit": 120,
-      "headline": "MUST BE 120 CHARS OR LESS. Deal-seeker friendly, value + location focused.",
-      "headlineCharCount": 95,
-      "shortDesc": "2-sentence Expedia hook. Value, amenities, easy booking.",
-      "fullBody": "Full Expedia description 4-5 sentences. Amenity-rich, location keywords, ideal for travellers comparing options.",
-      "tags": ["Free cancellation","Kitchen","Great location"]
-    },
-    {
-      "platform": "Hotels.com",
-      "icon": "🏩",
-      "colorClass": "hotelscom",
-      "charLimit": 100,
-      "headline": "MUST BE 100 CHARS OR LESS. Amenity-first headline with location.",
-      "headlineCharCount": 82,
-      "shortDesc": "2-sentence Hotels.com hook. Comfort and convenience focused.",
-      "fullBody": "Full Hotels.com description 4-5 sentences. Highlight room quality, kitchen, comfort, local area.",
-      "tags": ["Full kitchen","Self check-in","City center"]
-    },
-    {
-      "platform": "Agoda",
-      "icon": "🌐",
-      "colorClass": "agoda",
-      "charLimit": 80,
-      "headline": "MUST BE 80 CHARS OR LESS. Value-forward for Asia-Pacific travellers.",
-      "headlineCharCount": 65,
-      "shortDesc": "2-sentence Agoda hook. Value and location for international travellers.",
-      "fullBody": "Full Agoda description. Factual, value-driven, location details prominent.",
-      "tags": ["Great value","Airport nearby","Free WiFi"]
-    },
-    {
-      "platform": "Kayak",
-      "icon": "🔎",
-      "colorClass": "kayak",
-      "charLimit": 90,
-      "headline": "MUST BE 90 CHARS OR LESS. Search-first, comparison-friendly headline.",
-      "headlineCharCount": 74,
-      "shortDesc": "2-sentence Kayak hook. Clear value proposition for comparison shoppers.",
-      "fullBody": "Full Kayak description. Clean, factual, easy to skim. Best features upfront.",
-      "tags": ["Best price","Flexible dates","Instant book"]
-    },
-    {
-      "platform": "Homes & Villas by Marriott",
-      "icon": "🏅",
-      "colorClass": "marriott",
-      "charLimit": 100,
-      "headline": "MUST BE 100 CHARS OR LESS. Luxury editorial tone. Premium positioning.",
-      "headlineCharCount": 86,
-      "shortDesc": "2-sentence premium hook. Sophisticated, aspirational tone.",
-      "fullBody": "Full Marriott Homes & Villas description. Luxury tone, premium amenities, curated local experiences. Editorial quality.",
-      "tags": ["Premium home","Luxury amenities","Curated experience"]
-    },
-    {
-      "platform": "Plum Guide",
-      "icon": "✨",
-      "colorClass": "plumguide",
-      "charLimit": 60,
-      "headline": "MUST BE 60 CHARS OR LESS. Curated, editorial headline. Discerning traveller tone.",
-      "headlineCharCount": 48,
-      "shortDesc": "2-sentence editorial hook. Quality-obsessed, discerning tone.",
-      "fullBody": "Full Plum Guide description. Only the top 3% of homes. Curated quality tone, specific design details, authentic local feel.",
-      "tags": ["Handpicked","Design-led","Exceptional quality"]
-    },
-    {
-      "platform": "Houfy",
-      "icon": "🏡",
-      "colorClass": "houfy",
-      "charLimit": 75,
-      "headline": "MUST BE 75 CHARS OR LESS. Direct booking, owner-to-guest trust tone.",
-      "headlineCharCount": 60,
-      "shortDesc": "2-sentence direct booking hook. No middleman, owner pride.",
-      "fullBody": "Full Houfy description. Direct booking value, no platform fees, owner responsiveness, personal touch.",
-      "tags": ["Book direct","No fees","Owner managed"]
-    },
-    {
-      "platform": "Vacasa",
-      "icon": "🏘️",
-      "colorClass": "vacasa",
-      "charLimit": 80,
-      "headline": "MUST BE 80 CHARS OR LESS. Professional management tone with local flavor.",
-      "headlineCharCount": 65,
-      "shortDesc": "2-sentence Vacasa hook. Professional, trustworthy management tone.",
-      "fullBody": "Full Vacasa description. Professional managed property, consistent standards, local area highlights.",
-      "tags": ["Professionally managed","24/7 support","Local expertise"]
-    },
-    {
-      "platform": "Evolve",
-      "icon": "🔑",
-      "colorClass": "evolve",
-      "charLimit": 75,
-      "headline": "MUST BE 75 CHARS OR LESS. Transparent, guest-first, no-surprises tone.",
-      "headlineCharCount": 58,
-      "shortDesc": "2-sentence Evolve hook. Transparent pricing, easy experience.",
-      "fullBody": "Full Evolve description. Guest-first tone, transparent pricing, what you see is what you get.",
-      "tags": ["No hidden fees","Easy booking","Responsive host"]
-    },
-    {
-      "platform": "Furnished Finder",
-      "icon": "🛋️",
-      "colorClass": "furnishedfinder",
-      "charLimit": 80,
-      "headline": "MUST BE 80 CHARS OR LESS. Mid-term rental headline targeting workers and relocators.",
-      "headlineCharCount": 66,
-      "shortDesc": "2-sentence mid-term hook. Traveling nurses, remote workers, relocators.",
-      "fullBody": "Full Furnished Finder description. 30+ day stays, fully furnished, work-from-home setup, utilities, flexible lease.",
-      "tags": ["30+ day stays","Work desk","All utilities included"]
-    },
-    {
-      "platform": "Glamping Hub",
-      "icon": "⛺",
-      "colorClass": "glampinghub",
-      "charLimit": 60,
-      "headline": "MUST BE 60 CHARS OR LESS. Outdoor escape, nature-immersive headline.",
-      "headlineCharCount": 48,
-      "shortDesc": "2-sentence glamping hook. Unique outdoor experience, nature immersion.",
-      "fullBody": "Full Glamping Hub description. Unique stay, nature connection, outdoor activities, stargazing, disconnect-to-reconnect tone.",
-      "tags": ["Unique stay","Nature retreat","Off the beaten path"]
-    },
-    {
-      "platform": "Misterb&b",
-      "icon": "🌈",
-      "colorClass": "misterbnb",
-      "charLimit": 75,
-      "headline": "MUST BE 75 CHARS OR LESS. Inclusive, welcoming headline for LGBTQ+ travellers.",
-      "headlineCharCount": 60,
-      "shortDesc": "2-sentence inclusive hook. Safe, welcoming, affirming tone.",
-      "fullBody": "Full Misterb&b description. Inclusive and welcoming tone, LGBTQ+-friendly neighborhood highlights, safe and affirming stay.",
-      "tags": ["LGBTQ+ friendly","Safe space","Welcoming host"]
-    }
-  ],
-  "social": [
-    {
-      "platform": "Instagram",
-      "icon": "📸",
-      "caption": "Evocative Instagram caption with 3-4 sentences, lifestyle-focused, ends with 10 relevant hashtags on new line"
-    },
-    {
-      "platform": "Facebook",
-      "icon": "👥",
-      "caption": "Facebook post 3-4 sentences. Community/family tone. Include a question to drive engagement. No hashtags."
-    },
-    {
-      "platform": "TikTok",
-      "icon": "🎵",
-      "caption": "TikTok caption 1-2 punchy sentences. Hook + call to action. 5 trending hashtags."
-    },
-    {
-      "platform": "Twitter / X",
-      "icon": "🐦",
-      "caption": "Tweet under 240 chars. Witty and punchy. 2-3 hashtags."
-    }
-  ],
-  "photos": [
-    { "room": "Living Room", "emoji": "🛋️", "description": "Evocative 2-3 sentence description of living room photo for listing" },
-    { "room": "Master Bedroom", "emoji": "🛏️", "description": "Master bedroom photo description" },
-    { "room": "Guest Bedroom", "emoji": "🛏️", "description": "Guest bedroom photo description" },
-    { "room": "Kitchen", "emoji": "🍳", "description": "Kitchen photo description" },
-    { "room": "Primary Bathroom", "emoji": "🚿", "description": "Bathroom photo description" },
-    { "room": "Dining Area", "emoji": "🍽️", "description": "Dining area photo description" },
-    { "room": "Outdoor / Patio", "emoji": "🌿", "description": "Outdoor space photo description" },
-    { "room": "View / Surroundings", "emoji": "🌅", "description": "View or surroundings description" }
-  ],
-  "pricing": {
-    "platforms": [
-      { "name": "Airbnb", "low": 185, "high": 265, "avg": 220, "occupancy": "72%" },
-      { "name": "VRBO", "low": 195, "high": 280, "avg": 235, "occupancy": "68%" },
-      { "name": "Booking.com", "low": 175, "high": 250, "avg": 210, "occupancy": "65%" },
-      { "name": "Direct Book", "low": 160, "high": 240, "avg": 200, "occupancy": "80%" }
-    ],
-    "notes": "Pricing strategy note: 2-3 sentences about seasonal adjustments, weekend premiums, and revenue optimization tips.",
-    "seasonalTip": "Peak season advice for this location.",
-    "weekendPremium": "15-20%"
-  },
-  "rules": {
-    "checkIn": "4:00 PM",
-    "checkOut": "11:00 AM",
-    "items": [
-      { "icon": "🚭", "rule": "No smoking anywhere on the property" },
-      { "icon": "🐾", "rule": "Pets welcome with prior approval ($25/night fee)" },
-      { "icon": "🎉", "rule": "No parties or events without prior written approval" },
-      { "icon": "🔇", "rule": "Quiet hours 10 PM – 8 AM" },
-      { "icon": "🔑", "rule": "Self check-in via smart lock — code sent 24h before arrival" },
-      { "icon": "🧹", "rule": "Please leave the property tidy — basic cleaning required" },
-      { "icon": "👥", "rule": "Maximum occupancy strictly enforced" },
-      { "icon": "🚗", "rule": "2 parking spaces available in driveway" }
-    ],
-    "faq": [
-      { "q": "Is the WiFi fast enough for remote work?", "a": "Yes, we have 500 Mbps fiber internet throughout the property." },
-      { "q": "Is the property accessible?", "a": "The main floor is fully accessible. Please contact us for specific needs." },
-      { "q": "Are there nearby grocery stores?", "a": "A Whole Foods and local farmers market are within 10 minutes." },
-      { "q": "What's included in the kitchen?", "a": "Fully stocked with cookware, appliances, spices, coffee, and basic pantry items." },
-      { "q": "Is there a minimum stay?", "a": "2 nights on weekdays, 3 nights on weekends and holidays." },
-      { "q": "How do I get early or late check-out?", "a": "We accommodate when possible — message us at least 48h in advance." }
-    ]
-  },
-  "seo": {
-    "primaryKeywords": ["keyword1","keyword2","keyword3","keyword4","keyword5"],
-    "longTailKeywords": ["long tail 1","long tail 2","long tail 3","long tail 4"],
-    "localKeywords": ["local1","local2","local3"],
-    "titleTag": "SEO-optimized title tag under 60 chars",
-    "metaDescription": "Meta description under 155 chars with primary keywords",
-    "tips": ["SEO tip 1","SEO tip 2","SEO tip 3"]
-  },
-  "market": {
-    "yourRate": { "low": 180, "high": 280, "avg": 220 },
-    "marketAvg": { "low": 160, "high": 320, "avg": 235 },
-    "competitorRange": { "low": 140, "high": 380 },
-    "position": "slightly below market average — room to increase by 8-12%",
-    "byBedroom": [
-      { "bedrooms": 1, "marketAvg": 120, "suggested": 130 },
-      { "bedrooms": 2, "marketAvg": 175, "suggested": 190 },
-      { "bedrooms": 3, "marketAvg": 235, "suggested": 255 },
-      { "bedrooms": 4, "marketAvg": 310, "suggested": 340 },
-      { "bedrooms": 5, "marketAvg": 420, "suggested": 460 }
-    ],
-    "seasonal": [
-      { "period": "Peak Summer (Jun–Aug)", "multiplier": 1.4, "suggestedRate": 308, "notes": "Highest demand — book out 3-4 months ahead" },
-      { "period": "Spring Break (Mar–Apr)", "multiplier": 1.25, "suggestedRate": 275, "notes": "Family travel surge — 3-night minimum recommended" },
-      { "period": "Holiday Season (Nov–Dec)", "multiplier": 1.35, "suggestedRate": 297, "notes": "Thanksgiving and Christmas command premium rates" },
-      { "period": "Shoulder Season (Apr–May, Sep–Oct)", "multiplier": 0.9, "suggestedRate": 198, "notes": "Slightly reduce to maintain occupancy" },
-      { "period": "Low Season (Jan–Feb)", "multiplier": 0.7, "suggestedRate": 154, "notes": "Offer weekly discounts to fill gaps" }
-    ],
-    "occasions": [
-      { "occasion": "New Year's Eve", "premium": "2.5x", "suggestedRate": 550, "minStay": 3, "tip": "Require 3-night minimum, book 2-3 months out" },
-      { "occasion": "Super Bowl Weekend", "premium": "1.8x", "suggestedRate": 396, "minStay": 2, "tip": "If near host city, rates spike dramatically" },
-      { "occasion": "Valentine's Day", "premium": "1.4x", "suggestedRate": 308, "minStay": 2, "tip": "Couples getaway — highlight romantic amenities" },
-      { "occasion": "Memorial Day Weekend", "premium": "1.6x", "suggestedRate": 352, "minStay": 3, "tip": "First big summer weekend — price aggressively" },
-      { "occasion": "4th of July", "premium": "1.7x", "suggestedRate": 374, "minStay": 3, "tip": "Book out months in advance near any attraction" },
-      { "occasion": "Labor Day Weekend", "premium": "1.5x", "suggestedRate": 330, "minStay": 3, "tip": "Last summer hurrah — strong demand" },
-      { "occasion": "Local Festivals/Events", "premium": "1.3-2x", "suggestedRate": 286, "minStay": 2, "tip": "Monitor local event calendar and adjust dynamically" }
-    ],
-    "weekly": { "discount": "10-15%", "suggestedWeekly": 1386, "breakeven": 7, "tip": "Weekly discounts increase occupancy by 20-30% in shoulder season" },
-    "monthly": { "discount": "25-35%", "suggestedMonthly": 4620, "breakeven": 21, "tip": "Monthly stays eliminate turnover costs — great for slow months" },
-    "revenueProjection": {
-      "conservative": 28600,
-      "moderate": 38500,
-      "optimistic": 52800,
-      "topTip": "Dynamic pricing + instant book + no minimum stay in low season = 15-20% revenue boost"
-    }
+    "highlights": ["h1","h2","h3","h4","h5"],
+    "nearbyAttractions": ["a1","a2","a3","a4","a5"]
   }
+  ${wantPhotos ? `,"photos": [
+    {"room":"Living Room","emoji":"🛋️","description":"Evocative 2-3 sentence description"},
+    {"room":"Master Bedroom","emoji":"🛏️","description":"Description"},
+    {"room":"Guest Bedroom","emoji":"🛏️","description":"Description"},
+    {"room":"Kitchen","emoji":"🍳","description":"Description"},
+    {"room":"Primary Bathroom","emoji":"🚿","description":"Description"},
+    {"room":"Dining Area","emoji":"🍽️","description":"Description"},
+    {"room":"Outdoor / Patio","emoji":"🌿","description":"Description"},
+    {"room":"View / Surroundings","emoji":"🌅","description":"Description"}
+  ]` : ''}
+  ${wantSocial ? `,"social": [
+    {"platform":"Instagram","icon":"📸","caption":"Evocative caption with 10 hashtags"},
+    {"platform":"Facebook","icon":"👥","caption":"Community tone, ends with question"},
+    {"platform":"TikTok","icon":"🎵","caption":"Punchy 1-2 sentences with 5 hashtags"},
+    {"platform":"Twitter / X","icon":"🐦","caption":"Under 240 chars, witty, 2-3 hashtags"}
+  ]` : ''}
+  ${wantPricing ? `,"pricing": {
+    "platforms": [
+      {"name":"Airbnb","low":185,"high":265,"avg":220,"occupancy":"72%"},
+      {"name":"VRBO","low":195,"high":280,"avg":235,"occupancy":"68%"},
+      {"name":"Booking.com","low":175,"high":250,"avg":210,"occupancy":"65%"},
+      {"name":"Direct Book","low":160,"high":240,"avg":200,"occupancy":"80%"}
+    ],
+    "notes":"2-3 sentences on pricing strategy",
+    "seasonalTip":"Peak season advice",
+    "weekendPremium":"15-20%"
+  }` : ''}
+  ${wantRules ? `,"rules": {
+    "checkIn":"4:00 PM","checkOut":"11:00 AM",
+    "items":[
+      {"icon":"🚭","rule":"No smoking anywhere on the property"},
+      {"icon":"🐾","rule":"Pets welcome with prior approval"},
+      {"icon":"🎉","rule":"No parties without written approval"},
+      {"icon":"🔇","rule":"Quiet hours 10 PM - 8 AM"},
+      {"icon":"🔑","rule":"Self check-in via smart lock"},
+      {"icon":"🧹","rule":"Basic cleaning required on checkout"},
+      {"icon":"👥","rule":"Maximum occupancy strictly enforced"},
+      {"icon":"🚗","rule":"2 parking spaces available"}
+    ],
+    "faq":[
+      {"q":"Is WiFi fast enough for remote work?","a":"Yes, 500 Mbps fiber throughout."},
+      {"q":"Are there nearby grocery stores?","a":"Whole Foods within 10 minutes."},
+      {"q":"What is included in the kitchen?","a":"Fully stocked with cookware and appliances."},
+      {"q":"Is there a minimum stay?","a":"2 nights weekdays, 3 nights weekends."},
+      {"q":"Can I get early check-in?","a":"We accommodate when possible — message 48h ahead."},
+      {"q":"Is the property accessible?","a":"Main floor fully accessible."}
+    ]
+  }` : ''}
+  ${wantSEO ? `,"seo": {
+    "primaryKeywords":["kw1","kw2","kw3","kw4","kw5"],
+    "longTailKeywords":["lt1","lt2","lt3","lt4"],
+    "localKeywords":["loc1","loc2","loc3"],
+    "titleTag":"SEO title under 60 chars",
+    "metaDescription":"Meta description under 155 chars",
+    "tips":["tip1","tip2","tip3"]
+  }` : ''}
+  ${wantMarket ? `,"market": {
+    "yourRate":{"low":180,"high":280,"avg":220},
+    "marketAvg":{"low":160,"high":320,"avg":235},
+    "competitorRange":{"low":140,"high":380},
+    "position":"slightly below market average — room to increase by 8-12%",
+    "byBedroom":[
+      {"bedrooms":1,"marketAvg":120,"suggested":130},
+      {"bedrooms":2,"marketAvg":175,"suggested":190},
+      {"bedrooms":3,"marketAvg":235,"suggested":255},
+      {"bedrooms":4,"marketAvg":310,"suggested":340},
+      {"bedrooms":5,"marketAvg":420,"suggested":460}
+    ],
+    "seasonal":[
+      {"period":"Peak Summer (Jun-Aug)","multiplier":1.4,"suggestedRate":308,"notes":"Highest demand"},
+      {"period":"Spring Break (Mar-Apr)","multiplier":1.25,"suggestedRate":275,"notes":"Family surge"},
+      {"period":"Holiday Season (Nov-Dec)","multiplier":1.35,"suggestedRate":297,"notes":"Premium rates"},
+      {"period":"Shoulder Season","multiplier":0.9,"suggestedRate":198,"notes":"Slight reduction"},
+      {"period":"Low Season (Jan-Feb)","multiplier":0.7,"suggestedRate":154,"notes":"Offer discounts"}
+    ],
+    "occasions":[
+      {"occasion":"New Years Eve","premium":"2.5x","suggestedRate":550,"minStay":3,"tip":"Book 2-3 months out"},
+      {"occasion":"Memorial Day Weekend","premium":"1.6x","suggestedRate":352,"minStay":3,"tip":"First big summer weekend"},
+      {"occasion":"4th of July","premium":"1.7x","suggestedRate":374,"minStay":3,"tip":"Price aggressively"},
+      {"occasion":"Labor Day Weekend","premium":"1.5x","suggestedRate":330,"minStay":3,"tip":"Last summer hurrah"},
+      {"occasion":"Local Festivals","premium":"1.3-2x","suggestedRate":286,"minStay":2,"tip":"Monitor event calendar"}
+    ],
+    "weekly":{"discount":"10-15%","suggestedWeekly":1386,"breakeven":7,"tip":"Increases occupancy 20-30%"},
+    "monthly":{"discount":"25-35%","suggestedMonthly":4620,"breakeven":21,"tip":"Eliminates turnover costs"},
+    "revenueProjection":{"conservative":28600,"moderate":38500,"optimistic":52800,"topTip":"Dynamic pricing + instant book = 15-20% revenue boost"}
+  }` : ''}
 }`;
 
-  setStep(4);
+  const mainResp = await callAPI(mainPrompt);
+  let result = mainResp;
+
+  // If OTA requested, do a separate focused call for OTA copy only
+  if (wantOTA && selectedOTAs.size > 0) {
+    setStep(3);
+    const location = result.property?.address || url;
+    const nearby = (result.property?.nearbyAttractions || []).join(', ') || 'local attractions';
+    const propType = result.property?.type || 'vacation rental';
+    const beds = result.property?.bedrooms || 3;
+    const guests = result.property?.guests || 6;
+
+    const charLimits = {
+      'Airbnb':50,'VRBO':75,'Booking.com':60,'TripAdvisor':80,
+      'Google Vacation Rentals':100,'Hipcamp':60,'Expedia':120,
+      'Hotels.com':100,'Agoda':80,'Kayak':90,
+      'Homes & Villas by Marriott':100,'Plum Guide':60,'Houfy':75,
+      'Vacasa':80,'Evolve':75,'Furnished Finder':80,
+      'Glamping Hub':60,'Misterb&b':75
+    };
+    const limitsText = otaList.map(p => `- ${p}: MAX ${charLimits[p]||75} chars`).join('\n');
+    const otaJsonTemplate = otaList.map(p => {
+      const icons = {'Airbnb':'🏠','VRBO':'🌴','Booking.com':'🔵','TripAdvisor':'🦉','Google Vacation Rentals':'🔍','Hipcamp':'🏕️','Expedia':'🏨','Hotels.com':'🏩','Agoda':'🌐','Kayak':'🔎','Homes & Villas by Marriott':'🏅','Plum Guide':'✨','Houfy':'🏡','Vacasa':'🏘️','Evolve':'🔑','Furnished Finder':'🛋️','Glamping Hub':'⛺',"Misterb&b":'🌈'};
+      const classes = {'Airbnb':'airbnb','VRBO':'vrbo','Booking.com':'booking','TripAdvisor':'tripadvisor','Google Vacation Rentals':'google','Hipcamp':'hipcamp','Expedia':'expedia','Hotels.com':'hotelscom','Agoda':'agoda','Kayak':'kayak','Homes & Villas by Marriott':'marriott','Plum Guide':'plumguide','Houfy':'houfy','Vacasa':'vacasa','Evolve':'evolve','Furnished Finder':'furnishedfinder','Glamping Hub':'glampinghub',"Misterb&b":'misterbnb'};
+      return `{"platform":"${p}","icon":"${icons[p]||'🏠'}","colorClass":"${classes[p]||'default'}","charLimit":${charLimits[p]||75},"headline":"WRITE HEADLINE UNDER ${charLimits[p]||75} CHARS","headlineCharCount":0,"shortDesc":"2 sentence hook","fullBody":"Full 4-5 sentence description","tags":["tag1","tag2","tag3"]}`;
+    }).join(',\n  ');
+
+    const otaPrompt = `You are an expert vacation rental copywriter. Write optimized listings for ONLY these ${otaList.length} platforms: ${otaList.join(', ')}.
+
+Property: ${result.property?.title || 'Vacation Rental'}
+Location: ${location}
+Type: ${propType}, ${beds} bedrooms, ${guests} guests
+Nearby attractions to weave into headlines: ${nearby}
+
+STRICT CHARACTER LIMITS (count every character including spaces):
+${limitsText}
+
+Use nearby attractions in headlines. Match each platform tone. Return ONLY valid JSON:
+{"otas": [
+  ${otaJsonTemplate}
+]}`;
+
+    const otaResp = await callAPI(otaPrompt);
+    result.otas = otaResp.otas || [];
+  }
+
+  return result;
+}
+
+async function callAPI(prompt) {
   const response = await fetch('/api/chat', {
     method: 'POST',
-    headers: {
-          'Content-Type': 'application/json',
-          'anthropic-version': '2023-06-01'
-        },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       model: 'claude-sonnet-4-20250514',
       max_tokens: 4000,
@@ -1742,24 +1611,17 @@ Return ONLY valid JSON (no markdown, no backticks):
     })
   });
 
-  if (!response.ok) throw new Error('API error — please try again.');
+  if (!response.ok) throw new Error('API request failed. Please try again.');
   const apiData = await response.json();
   const text = apiData.content.map(b => b.text || '').join('');
 
-  setStep(5);
-  await sleep(400);
-
-  let parsed;
   try {
-    // Extract JSON from response - find first { to last }
     const jsonMatch = text.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) throw new Error('No JSON found in response');
-    parsed = JSON.parse(jsonMatch[0]);
+    if (!jsonMatch) throw new Error('No JSON found');
+    return JSON.parse(jsonMatch[0]);
   } catch(e) {
-    console.error('Parse error:', e, 'Raw text:', text.substring(0, 200));
     throw new Error('Could not parse response. Please try again.');
   }
-  return parsed;
 }
 
 // ─── RENDER ───────────────────────────────────────────────────────────────────
@@ -2525,6 +2387,65 @@ function renderMarket(m, property) {
       <button class="copy-btn" style="margin-top:14px;width:auto;padding:8px 20px;" onclick="navigator.clipboard.writeText(document.getElementById('marketContent').innerText).then(()=>alert('Market report copied!'))">Copy Full Report</button>
     </div>
   `;
+}
+
+
+// ─── OTA SELECTOR ────────────────────────────────────────────────────────────
+let selectedOTAs = new Set();
+
+function toggleOTA(el, name) {
+  if (selectedOTAs.has(name)) {
+    selectedOTAs.delete(name);
+    el.classList.remove('active');
+  } else {
+    selectedOTAs.add(name);
+    el.classList.add('active');
+  }
+  updateOTACount();
+}
+
+function selectAllOTAs() {
+  document.querySelectorAll('.ota-sel-item').forEach(el => {
+    el.classList.add('active');
+    selectedOTAs.add(el.dataset.ota);
+  });
+  updateOTACount();
+}
+
+function selectPopularOTAs() {
+  clearOTAs();
+  ['Airbnb','VRBO','Booking.com','TripAdvisor'].forEach(name => {
+    selectedOTAs.add(name);
+    document.querySelector(`[data-ota="${name}"]`)?.classList.add('active');
+  });
+  updateOTACount();
+}
+
+function clearOTAs() {
+  selectedOTAs = new Set();
+  document.querySelectorAll('.ota-sel-item').forEach(el => el.classList.remove('active'));
+  updateOTACount();
+}
+
+function updateOTACount() {
+  const el = document.getElementById('otaCount');
+  if (el) el.textContent = selectedOTAs.size + ' of 18 selected';
+}
+
+// Show/hide OTA selector based on whether OTA feature is selected
+const origToggleFeature = toggleFeature;
+function toggleFeature(el, feature) {
+  if (selectedFeatures.has(feature)) {
+    selectedFeatures.delete(feature);
+    el.classList.remove('active');
+  } else {
+    selectedFeatures.add(feature);
+    el.classList.add('active');
+  }
+  updateFsCount();
+  // Show OTA selector if OTA is selected
+  const otaSel = document.getElementById('otaSelector');
+  if (otaSel) otaSel.style.display = selectedFeatures.has('ota') ? 'block' : 'none';
 }
 
 </script>
