@@ -1407,7 +1407,6 @@ function updateStepsForSelection() {
     { id: 's2', label: '📸 Analyzing photos', feature: 'photos' },
     { id: 's3', label: '💰 Pricing research', feature: 'pricing' },
     { id: 's4', label: '✍️ Writing copy', feature: 'ota' },
-    { id: 's5', label: '📱 Social captions', feature: 'social' },
     { id: 's6', label: '📋 Rules & FAQ', feature: 'rules' },
   ];
   stepMap.forEach(s => {
@@ -1706,22 +1705,7 @@ function renderResults(data) {
     </div>`;
   });
 
-  // Social
-  const socialGrid = document.getElementById('socialGrid');
-  socialGrid.innerHTML = '';
-  (social||[]).forEach(s => {
-    socialGrid.innerHTML += `
-    <div class="social-card">
-      <div class="social-header">
-        <div class="social-icon">${s.icon}</div>
-        <div class="social-platform">${s.platform}</div>
-      </div>
-      <div class="social-body">
-        <div class="social-caption" contenteditable="true">${s.caption||''}</div>
-        <button class="copy-btn" style="margin-top:12px;width:100%;" onclick="copyParentText(this)">Copy caption</button>
-      </div>
-    </div>`;
-  });
+  // Social media removed
 
   // Photos
   const photosGrid = document.getElementById('photosGrid');
@@ -2244,7 +2228,7 @@ function toggleMorePlatforms(btn) {
 
 // ─── FEATURE SELECTOR ────────────────────────────────────────────────────────
 let selectedFeatures = new Set();
-let wantOTA = false, wantPhotos = false, wantSocial = false;
+let wantOTA = false, wantPhotos = false;
 let wantPricing = false, wantRules = false, wantSEO = false;
 let wantMarket = false, wantAudit = false, wantOTADesc = false;
 let otaList = [];
@@ -2252,7 +2236,6 @@ let otaList = [];
 function refreshWantFlags() {
   wantOTA = selectedFeatures.has('ota');
   wantPhotos = selectedFeatures.has('photos');
-  wantSocial = selectedFeatures.has('social');
   wantPricing = selectedFeatures.has('pricing');
   wantRules = selectedFeatures.has('rules');
   wantSEO = selectedFeatures.has('seo');
