@@ -1,0 +1,2102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VR365 Listing AI — Property Marketing Suite</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ── RESET & BASE ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --black: #000000;
+  --white: #ffffff;
+  --near-black: #0a0a0a;
+  --off-white: #f5f5f7;
+  --mid-gray: #6e6e73;
+  --light-gray: #d2d2d7;
+  --gold: #c9a84c;
+  --gold-bright: #f0c040;
+  --green: #34c759;
+  --red: #ff3b30;
+  --blue: #0071e3;
+  --ink: #1d1d1f;
+  --border-dark: rgba(255,255,255,0.1);
+  --border-light: rgba(0,0,0,0.1);
+  --cream: #f7f4ef;
+  --warm: #e8e0d4;
+  --rust: #b85c3a;
+  --sage: #5a8a62;
+  --text-muted: #7a7468;
+  --shadow: 0 4px 24px rgba(0,0,0,0.07);
+  --gold-light: #f0d98a;
+}
+html { scroll-behavior: smooth; }
+body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--black); color: var(--white); overflow-x: hidden; }
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #111; }
+::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  padding: 0 24px;
+  height: 52px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(0,0,0,0.72);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 0.5px solid var(--border-dark);
+  transition: background 0.3s;
+}
+.nav-logo { font-size: 1.1rem; font-weight: 700; letter-spacing: -0.3px; color: white; }
+.nav-logo span { color: var(--gold); }
+.nav-links { display: flex; gap: 28px; }
+.nav-links a { font-size: 0.78rem; font-weight: 400; color: rgba(255,255,255,0.75); text-decoration: none; transition: color 0.2s; letter-spacing: 0.1px; }
+.nav-links a:hover { color: white; }
+.nav-cta { display: flex; gap: 12px; align-items: center; }
+.nav-btn { padding: 7px 16px; border-radius: 20px; font-family: inherit; font-size: 0.78rem; font-weight: 500; cursor: pointer; transition: all 0.2s; border: none; }
+.nav-btn.ghost { background: rgba(255,255,255,0.1); color: white; }
+.nav-btn.ghost:hover { background: rgba(255,255,255,0.2); }
+.nav-btn.solid { background: var(--gold); color: #000; font-weight: 700; }
+.nav-btn.solid:hover { background: var(--gold-bright); }
+
+/* ── HERO SECTION ── */
+.hero-section {
+  min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center;
+  padding: 120px 24px 80px;
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(201,168,76,0.12) 0%, transparent 70%), var(--black);
+}
+.hero-section::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c9a84c' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  opacity: 0.4;
+}
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 0.75rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 28px;
+  opacity: 0; animation: fadeUp 0.8s 0.1s ease forwards;
+}
+.hero-eyebrow::before, .hero-eyebrow::after { content: ''; width: 32px; height: 1px; background: var(--gold); opacity: 0.5; }
+.hero-h1 {
+  font-size: clamp(3.2rem, 8vw, 7rem);
+  font-weight: 800;
+  line-height: 1.03;
+  letter-spacing: -0.04em;
+  margin-bottom: 28px;
+  background: linear-gradient(180deg, #ffffff 0%, rgba(255,255,255,0.7) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  opacity: 0; animation: fadeUp 0.8s 0.2s ease forwards;
+}
+.hero-h1 .gold-text {
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-bright) 50%, var(--gold) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.hero-sub {
+  font-size: clamp(1rem, 2vw, 1.35rem);
+  font-weight: 300;
+  color: rgba(255,255,255,0.55);
+  max-width: 680px;
+  line-height: 1.7;
+  margin-bottom: 44px;
+  opacity: 0; animation: fadeUp 0.8s 0.35s ease forwards;
+}
+.hero-cta-row {
+  display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+  margin-bottom: 72px;
+  opacity: 0; animation: fadeUp 0.8s 0.5s ease forwards;
+}
+.cta-primary {
+  padding: 16px 36px; background: white; color: black;
+  border: none; border-radius: 980px; font-family: inherit;
+  font-size: 1rem; font-weight: 600; cursor: pointer;
+  transition: all 0.25s; letter-spacing: -0.2px;
+}
+.cta-primary:hover { background: var(--off-white); transform: scale(1.03); }
+.cta-secondary {
+  padding: 16px 36px; background: transparent; color: white;
+  border: 1px solid rgba(255,255,255,0.25); border-radius: 980px; font-family: inherit;
+  font-size: 1rem; font-weight: 400; cursor: pointer;
+  transition: all 0.25s; letter-spacing: -0.2px;
+}
+.cta-secondary:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.4); }
+.hero-stats {
+  display: flex; gap: 0; justify-content: center;
+  border: 0.5px solid var(--border-dark);
+  border-radius: 16px; overflow: hidden;
+  opacity: 0; animation: fadeUp 0.8s 0.65s ease forwards;
+}
+.hero-stat {
+  padding: 20px 36px;
+  text-align: center;
+  border-right: 0.5px solid var(--border-dark);
+}
+.hero-stat:last-child { border-right: none; }
+.stat-big { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.04em; color: white; display: block; }
+.stat-small { font-size: 0.72rem; color: rgba(255,255,255,0.4); letter-spacing: 0.5px; margin-top: 2px; display: block; }
+
+/* ── PRODUCT SHOWCASE ── */
+.showcase-section {
+  background: var(--black);
+  padding: 120px 24px;
+  text-align: center;
+  border-top: 0.5px solid var(--border-dark);
+}
+.section-eyebrow { font-size: 0.72rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
+.section-h2 {
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  font-weight: 800; letter-spacing: -0.04em; line-height: 1.05;
+  margin-bottom: 16px;
+  background: linear-gradient(180deg, #fff 30%, rgba(255,255,255,0.6) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.section-sub { font-size: 1.05rem; color: rgba(255,255,255,0.45); font-weight: 300; max-width: 520px; margin: 0 auto 72px; line-height: 1.7; }
+
+/* ── PLATFORM CARDS ── */
+.platform-showcase {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  max-width: 1100px;
+  margin: 0 auto 2px;
+  background: var(--border-dark);
+  border-radius: 24px; overflow: hidden;
+}
+.platform-showcase + .platform-showcase { border-radius: 24px; overflow: hidden; margin-top: 0; }
+.platform-card {
+  background: #111111;
+  padding: 40px 32px;
+  text-align: left;
+  transition: background 0.3s;
+}
+.platform-card:hover { background: #161616; }
+.platform-icon-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.platform-emoji { font-size: 1.8rem; }
+.char-pill {
+  font-size: 0.7rem; font-weight: 700; padding: 4px 12px; border-radius: 20px;
+  background: rgba(201,168,76,0.15); color: var(--gold); border: 0.5px solid rgba(201,168,76,0.3);
+}
+.platform-name { font-size: 0.72rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 10px; }
+.platform-headline { font-size: 1.1rem; font-weight: 700; color: white; line-height: 1.3; margin-bottom: 14px; letter-spacing: -0.02em; }
+.char-bar-wrap { display: flex; align-items: center; gap: 10px; }
+.char-bar { flex: 1; height: 3px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; }
+.char-bar-fill { height: 100%; border-radius: 2px; transition: width 1.5s ease; }
+.char-status { font-size: 0.7rem; font-weight: 700; white-space: nowrap; }
+.status-ok { color: var(--green); }
+.status-warn { color: var(--gold); }
+
+/* ── BEFORE/AFTER ── */
+.ba-section {
+  background: var(--off-white);
+  padding: 140px 24px;
+}
+.ba-inner { max-width: 1100px; margin: 0 auto; }
+.ba-section .section-eyebrow { color: var(--gold); }
+.ba-section .section-h2 { background: linear-gradient(180deg, var(--ink) 0%, #555 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.ba-section .section-sub { color: var(--mid-gray); }
+.ba-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 64px; }
+.ba-col { border-radius: 20px; overflow: hidden; }
+.ba-header { padding: 20px 28px; font-weight: 700; font-size: 0.92rem; display: flex; align-items: center; gap: 10px; }
+.ba-col.without .ba-header { background: #f0eee9; color: #6e6e73; }
+.ba-col.with .ba-header { background: #000; color: white; }
+.ba-col.with .ba-header .ba-badge { color: var(--gold); }
+.ba-list { list-style: none; background: white; padding: 8px 0; }
+.ba-col.without .ba-list { background: #fafaf8; }
+.ba-item { display: flex; align-items: flex-start; gap: 12px; padding: 13px 28px; font-size: 0.875rem; line-height: 1.5; border-bottom: 0.5px solid rgba(0,0,0,0.05); }
+.ba-item:last-child { border-bottom: none; }
+.ba-col.without .ba-item { color: #86868b; }
+.ba-col.without .ba-item .ba-icon { color: #ff3b30; }
+.ba-col.with .ba-item { color: var(--ink); font-weight: 400; }
+.ba-col.with .ba-item .ba-icon { color: var(--green); }
+.ba-item strong { color: var(--ink); font-weight: 600; }
+
+/* ── FEATURES BIG ── */
+.features-section { background: var(--black); padding: 140px 24px; }
+.features-inner { max-width: 1100px; margin: 0 auto; }
+.features-bento { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; margin-top: 72px; }
+.bento { background: #111; border-radius: 20px; padding: 36px; transition: transform 0.3s, background 0.3s; position: relative; overflow: hidden; }
+.bento:hover { background: #161616; transform: translateY(-4px); }
+.bento-1 { grid-column: span 5; }
+.bento-2 { grid-column: span 7; }
+.bento-3 { grid-column: span 4; }
+.bento-4 { grid-column: span 4; }
+.bento-5 { grid-column: span 4; }
+.bento-6 { grid-column: span 7; }
+.bento-7 { grid-column: span 5; }
+.bento-8 { grid-column: span 12; display: grid; grid-template-columns: 1fr 1fr; gap: 36px; align-items: center; }
+.bento-icon { font-size: 2.4rem; margin-bottom: 20px; display: block; }
+.bento-tag { font-size: 0.65rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+.bento h3 { font-size: 1.3rem; font-weight: 700; color: white; line-height: 1.2; margin-bottom: 12px; letter-spacing: -0.02em; }
+.bento p { font-size: 0.85rem; color: rgba(255,255,255,0.45); line-height: 1.65; }
+.bento-accent { position: absolute; bottom: 0; right: 0; width: 120px; height: 120px; background: radial-gradient(circle, rgba(201,168,76,0.15) 0%, transparent 70%); pointer-events: none; }
+.bento-platforms { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+.bento-pill { font-size: 0.72rem; padding: 4px 12px; border-radius: 20px; background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.6); border: 0.5px solid rgba(255,255,255,0.1); }
+.bento-number { font-size: 4rem; font-weight: 900; letter-spacing: -0.06em; background: linear-gradient(135deg, var(--gold), var(--gold-bright)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 8px; line-height: 1; }
+
+/* ── PRICING ── */
+.pricing-section { background: var(--black); padding: 140px 24px; border-top: 0.5px solid var(--border-dark); }
+.pricing-inner { max-width: 900px; margin: 0 auto; text-align: center; }
+.pricing-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 64px 0 40px; text-align: left; }
+.price-tile {
+  border-radius: 20px; padding: 40px;
+  border: 0.5px solid var(--border-dark);
+  background: #111;
+  position: relative;
+  transition: transform 0.3s;
+}
+.price-tile:hover { transform: translateY(-4px); }
+.price-tile.featured {
+  background: linear-gradient(145deg, #1a1506 0%, #111 60%);
+  border-color: rgba(201,168,76,0.4);
+}
+.price-tile.featured::before {
+  content: '';
+  position: absolute; inset: 0;
+  border-radius: 20px;
+  background: linear-gradient(145deg, rgba(201,168,76,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+.popular-tag {
+  display: inline-block;
+  background: var(--gold); color: #000;
+  font-size: 0.65rem; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;
+  padding: 4px 12px; border-radius: 980px; margin-bottom: 20px;
+}
+.price-name { font-size: 0.72rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 12px; }
+.price-amount-big { font-size: 5rem; font-weight: 800; letter-spacing: -0.05em; line-height: 1; color: white; margin-bottom: 4px; }
+.price-amount-big sup { font-size: 1.8rem; vertical-align: super; font-weight: 600; }
+.price-amount-big sub { font-size: 1rem; font-weight: 400; color: rgba(255,255,255,0.4); }
+.price-tagline { font-size: 0.85rem; color: rgba(255,255,255,0.4); margin-bottom: 32px; padding-bottom: 32px; border-bottom: 0.5px solid var(--border-dark); line-height: 1.6; }
+.price-feats { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 36px; }
+.price-feats li { font-size: 0.88rem; color: rgba(255,255,255,0.7); display: flex; align-items: flex-start; gap: 10px; line-height: 1.4; }
+.price-feats li .feat-icon { color: var(--green); flex-shrink: 0; font-size: 0.9rem; }
+.price-feats li.off { color: rgba(255,255,255,0.2); text-decoration: line-through; }
+.price-feats li.off .feat-icon { color: rgba(255,255,255,0.15); }
+.price-cta {
+  width: 100%; padding: 15px; border-radius: 980px; border: none;
+  font-family: inherit; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.25s;
+}
+.price-cta.white { background: white; color: black; }
+.price-cta.white:hover { background: var(--off-white); }
+.price-cta.gold { background: var(--gold); color: #000; }
+.price-cta.gold:hover { background: var(--gold-bright); }
+.price-note { font-size: 0.72rem; color: rgba(255,255,255,0.25); text-align: center; margin-top: 10px; }
+.pricing-math-row {
+  background: linear-gradient(135deg, rgba(201,168,76,0.1) 0%, rgba(201,168,76,0.03) 100%);
+  border: 0.5px solid rgba(201,168,76,0.2);
+  border-radius: 16px; padding: 32px 40px;
+  display: grid; grid-template-columns: 1fr auto;
+  gap: 24px; align-items: center;
+}
+.math-left h4 { font-size: 1.05rem; font-weight: 700; color: white; margin-bottom: 8px; letter-spacing: -0.02em; }
+.math-left p { font-size: 0.85rem; color: rgba(255,255,255,0.45); line-height: 1.6; }
+.math-right { text-align: center; white-space: nowrap; }
+.math-saving { font-size: 2.2rem; font-weight: 800; color: var(--gold); letter-spacing: -0.04em; }
+.math-saving-sub { font-size: 0.72rem; color: rgba(255,255,255,0.35); margin-top: 2px; }
+
+/* ── TOOL SECTION ── */
+.tool-reveal-section {
+  background: var(--off-white);
+  padding: 140px 24px;
+}
+.tool-reveal-inner { max-width: 800px; margin: 0 auto; }
+.tool-reveal-section .section-eyebrow { color: var(--gold); }
+.tool-reveal-section .section-h2 { background: linear-gradient(180deg, #000 0%, #555 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.tool-reveal-section .section-sub { color: var(--mid-gray); }
+
+/* ── MAIN TOOL (inherited from existing) ── */
+.main { max-width: 1140px; margin: 0 auto; padding: 0 48px 80px; }
+
+/* (Copy all existing tool CSS below) */
+:root {
+  --ink: #0f0e0d; --cream: #f7f4ef; --warm: #e8e0d4;
+  --text-muted: #7a7468; --border: rgba(15,14,13,0.1);
+}
+body.tool-active { background: var(--cream); }
+.tool-bg { background: var(--cream); padding: 0 0 80px; }
+
+/* ── FOOTER ── */
+footer {
+  background: #000; border-top: 0.5px solid var(--border-dark);
+  padding: 48px 24px; text-align: center;
+}
+.footer-logo { font-size: 1.1rem; font-weight: 700; color: white; margin-bottom: 16px; }
+.footer-logo span { color: var(--gold); }
+.footer-links { display: flex; justify-content: center; gap: 28px; margin-bottom: 24px; flex-wrap: wrap; }
+.footer-links a { font-size: 0.78rem; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.2s; }
+.footer-links a:hover { color: white; }
+.footer-copy { font-size: 0.72rem; color: rgba(255,255,255,0.2); }
+
+
+/* MORE PLATFORMS */
+.more-platforms-wrap { max-width: 1100px; margin: 16px auto 0; }
+.more-platforms-btn {
+  width: 100%; display: flex; align-items: center; gap: 14px;
+  background: rgba(255,255,255,0.04); border: 0.5px solid rgba(255,255,255,0.1);
+  border-radius: 14px; padding: 16px 24px; cursor: pointer; transition: all 0.25s;
+  font-family: inherit; color: white; text-align: left;
+}
+.more-platforms-btn:hover { background: rgba(255,255,255,0.07); border-color: rgba(201,168,76,0.3); }
+.more-platforms-btn .mp-icon { font-size: 1rem; color: var(--gold); font-weight: 700; flex-shrink: 0; transition: transform 0.3s; }
+.more-platforms-btn.open .mp-icon { transform: rotate(45deg); }
+.more-platforms-btn .mp-text { font-size: 0.88rem; font-weight: 600; color: rgba(255,255,255,0.8); flex-shrink: 0; }
+.more-platforms-btn .mp-sub { font-size: 0.75rem; color: rgba(255,255,255,0.3); flex: 1; }
+.more-platforms-btn .mp-arrow { font-size: 1.2rem; color: rgba(255,255,255,0.2); flex-shrink: 0; transition: transform 0.3s; }
+.more-platforms-btn.open .mp-arrow { transform: rotate(90deg); }
+.more-platforms-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 2px; margin-top: 2px;
+  background: rgba(255,255,255,0.06); border-radius: 14px; overflow: hidden;
+}
+.mp-card {
+  background: #111; padding: 24px 20px; transition: background 0.2s;
+}
+.mp-card:hover { background: #161616; }
+.mp-icon-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.mp-emoji { font-size: 1.4rem; }
+.mp-limit { font-size: 0.62rem; font-weight: 700; padding: 3px 8px; border-radius: 20px; background: rgba(201,168,76,0.12); color: var(--gold); border: 0.5px solid rgba(201,168,76,0.2); }
+.mp-name { font-size: 0.82rem; font-weight: 700; color: white; margin-bottom: 6px; letter-spacing: -0.01em; }
+.mp-desc { font-size: 0.72rem; color: rgba(255,255,255,0.35); line-height: 1.5; }
+@media(max-width:900px) { .more-platforms-grid { grid-template-columns: repeat(2,1fr); } }
+@media(max-width:500px) { .more-platforms-grid { grid-template-columns: 1fr; } }
+
+/* ── SCROLL REVEAL ── */
+.reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes glow { 0%,100% { box-shadow: 0 0 40px rgba(201,168,76,0.2); } 50% { box-shadow: 0 0 80px rgba(201,168,76,0.4); } }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ── EXISTING TOOL STYLES ── */
+.url-form { display:flex; max-width:660px; margin:0 auto 20px; border:2px solid #0f0e0d; border-radius:4px; overflow:hidden; background:white; transition:box-shadow 0.2s; }
+.url-form:focus-within { box-shadow:6px 6px 0 #c9a84c; }
+.url-form input { flex:1; padding:15px 20px; border:none; outline:none; font-family:inherit; font-size:0.95rem; color:#0f0e0d; }
+.url-form input::placeholder { color:#bbb; }
+.url-form button { padding:15px 28px; background:#0f0e0d; color:white; border:none; cursor:pointer; font-family:inherit; font-size:0.88rem; font-weight:600; letter-spacing:0.3px; transition:background 0.2s; white-space:nowrap; }
+.url-form button:hover { background:#b85c3a; }
+.url-form button:disabled { background:#bbb; cursor:not-allowed; }
+.photo-upload-area { max-width:660px; margin:0 auto 16px; border:2px dashed #e8e0d4; border-radius:8px; padding:20px; text-align:center; cursor:pointer; transition:all 0.2s; background:white; color:#0f0e0d; }
+.photo-upload-area:hover,.photo-upload-area.drag-over { border-color:#c9a84c; background:#fffdf5; }
+.photo-upload-area p { font-size:0.83rem; color:#7a7468; }
+.photo-upload-area strong { color:#0f0e0d; }
+.photo-thumbnails { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; justify-content:center; }
+.photo-thumb { width:56px; height:56px; object-fit:cover; border-radius:4px; border:2px solid #e8e0d4; }
+.photo-count-badge { font-size:0.72rem; background:#c9a84c; color:white; padding:3px 8px; border-radius:10px; font-weight:600; }
+.hint { font-size:0.75rem; color:#7a7468; text-align:center; margin-bottom:4px; }
+.hint span { display:inline-block; background:#e8e0d4; padding:2px 9px; border-radius:20px; margin:2px; font-weight:500; color:#0f0e0d; }
+.loading { display:none; text-align:center; padding:60px 0; }
+.loading.active { display:block; }
+.spinner { width:36px; height:36px; border:3px solid #e8e0d4; border-top-color:#c9a84c; border-radius:50%; animation:spin 0.8s linear infinite; margin:0 auto 16px; }
+.loading-title { font-size:1.3rem; margin-bottom:6px; font-weight:700; color:#0f0e0d; }
+.loading-sub { font-size:0.83rem; color:#7a7468; margin-bottom:28px; }
+.progress-steps { display:flex; justify-content:center; gap:8px; flex-wrap:wrap; }
+.step-pill { padding:5px 14px; border-radius:20px; font-size:0.75rem; font-weight:500; background:#e8e0d4; color:#7a7468; transition:all 0.3s; }
+.step-pill.active { background:#c9a84c; color:white; }
+.step-pill.done { background:#5a8a62; color:white; }
+.error-box { display:none; background:#fff5f5; border:1px solid #ffcccc; border-radius:8px; padding:24px; text-align:center; margin:32px 0; }
+.error-box.active { display:block; }
+.error-box h3 { color:#b85c3a; margin-bottom:8px; }
+.error-box p { font-size:0.85rem; color:#7a7468; }
+.results { display:none; }
+.results.active { display:block; }
+.tabs-nav { display:flex; gap:4px; margin-bottom:32px; border-bottom:2px solid rgba(15,14,13,0.1); overflow-x:auto; }
+.tab-btn { padding:10px 20px; border:none; background:transparent; cursor:pointer; font-family:inherit; font-size:0.85rem; font-weight:500; color:#7a7468; border-bottom:2px solid transparent; margin-bottom:-2px; white-space:nowrap; transition:all 0.2s; }
+.tab-btn:hover { color:#0f0e0d; }
+.tab-btn.active { color:#c9a84c; border-bottom-color:#c9a84c; font-weight:600; }
+.tab-panel { display:none; }
+.tab-panel.active { display:block; }
+.section-label { font-size:0.68rem; text-transform:uppercase; letter-spacing:3px; font-weight:600; color:#7a7468; margin-bottom:20px; display:flex; align-items:center; gap:12px; }
+.section-label::after { content:''; flex:1; height:1px; background:rgba(15,14,13,0.1); }
+.property-header { background:#0f0e0d; color:white; border-radius:10px; padding:36px 40px; margin-bottom:36px; display:grid; grid-template-columns:1fr auto; gap:24px; align-items:start; }
+.property-header h2 { font-size:2rem; font-weight:700; margin-bottom:6px; }
+.prop-address { font-size:0.85rem; color:rgba(255,255,255,0.55); font-weight:300; margin-bottom:18px; }
+.prop-badges { display:flex; flex-wrap:wrap; gap:8px; }
+.badge { padding:4px 12px; border-radius:4px; font-size:0.74rem; font-weight:500; background:rgba(255,255,255,0.1); color:rgba(255,255,255,0.8); }
+.badge.gold { background:#c9a84c; color:#0f0e0d; font-weight:600; }
+.prop-actions { display:flex; flex-direction:column; gap:8px; }
+.btn-outline-white { padding:9px 18px; border:1px solid rgba(255,255,255,0.25); color:white; background:transparent; border-radius:4px; cursor:pointer; font-family:inherit; font-size:0.8rem; font-weight:500; white-space:nowrap; transition:all 0.2s; }
+.btn-outline-white:hover { background:rgba(255,255,255,0.1); }
+.versions-bar { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; }
+.versions-list { display:flex; gap:8px; flex-wrap:wrap; }
+.version-chip { padding:5px 14px; border-radius:20px; font-size:0.75rem; font-weight:500; border:1px solid rgba(15,14,13,0.1); background:white; cursor:pointer; color:#7a7468; transition:all 0.2s; }
+.version-chip.active { background:#0f0e0d; color:white; border-color:#0f0e0d; }
+.btn-new-version { padding:7px 16px; border:1px solid #c9a84c; background:transparent; color:#c9a84c; border-radius:4px; cursor:pointer; font-family:inherit; font-size:0.78rem; font-weight:600; transition:all 0.2s; }
+.btn-new-version:hover { background:#c9a84c; color:white; }
+.ota-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:22px; margin-bottom:40px; }
+.ota-card { background:white; border:1px solid rgba(15,14,13,0.1); border-radius:8px; overflow:hidden; transition:transform 0.2s,box-shadow 0.2s; }
+.ota-card:hover { transform:translateY(-2px); box-shadow:0 4px 24px rgba(0,0,0,0.07); }
+.ota-card-header { padding:16px 20px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(15,14,13,0.1); }
+.ota-name { display:flex; align-items:center; gap:10px; font-weight:600; font-size:0.9rem; }
+.ota-icon { width:30px; height:30px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:0.95rem; }
+.ota-meta { font-size:0.7rem; color:#7a7468; text-align:right; }
+.ota-body { padding:20px; }
+.editable-field { position:relative; }
+.editable-label { font-size:0.65rem; text-transform:uppercase; letter-spacing:1.5px; color:#7a7468; font-weight:600; margin-bottom:4px; }
+.editable { width:100%; border:1px solid transparent; border-radius:4px; padding:8px; font-family:inherit; color:#0f0e0d; background:transparent; resize:vertical; transition:all 0.2s; line-height:1.6; }
+.editable:hover { border-color:#e8e0d4; background:#f7f4ef; }
+.editable:focus { outline:none; border-color:#c9a84c; background:white; }
+.ota-headline-field { font-size:1.1rem; font-weight:700; min-height:40px; }
+.ota-desc-field { font-size:0.83rem; min-height:80px; }
+.ota-fullbody-field { font-size:0.8rem; min-height:120px; color:#7a7468; }
+.ota-tags { display:flex; flex-wrap:wrap; gap:6px; margin:10px 0; }
+.ota-tag { font-size:0.7rem; padding:3px 10px; border-radius:20px; background:#f7f4ef; color:#7a7468; font-weight:500; }
+.seo-tags .ota-tag { background:#fffde7; color:#7a6800; border:1px solid #f0d000; }
+.ota-actions { display:flex; gap:8px; margin-top:12px; }
+.copy-btn { flex:1; padding:9px; border:1px solid rgba(15,14,13,0.1); background:#f7f4ef; border-radius:4px; cursor:pointer; font-family:inherit; font-size:0.78rem; font-weight:500; color:#0f0e0d; transition:all 0.2s; }
+.copy-btn:hover { background:#c9a84c; border-color:#c9a84c; color:white; }
+.copy-btn.copied { background:#5a8a62; border-color:#5a8a62; color:white; }
+.social-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px; margin-bottom:40px; }
+.social-card { background:white; border:1px solid rgba(15,14,13,0.1); border-radius:8px; overflow:hidden; }
+.social-header { padding:14px 18px; border-bottom:1px solid rgba(15,14,13,0.1); display:flex; align-items:center; gap:10px; }
+.social-icon { width:28px; height:28px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:0.9rem; }
+.social-platform { font-weight:600; font-size:0.88rem; }
+.social-body { padding:16px 18px; }
+.social-caption { font-size:0.83rem; line-height:1.65; color:#0f0e0d; white-space:pre-wrap; }
+.photos-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:20px; margin-bottom:40px; }
+.photo-card { background:white; border:1px solid rgba(15,14,13,0.1); border-radius:8px; overflow:hidden; }
+.photo-img-wrap { position:relative; }
+.photo-img { width:100%; aspect-ratio:4/3; object-fit:cover; display:block; }
+.photo-placeholder { width:100%; aspect-ratio:4/3; background:linear-gradient(135deg,#e8e0d4,#f7f4ef); display:flex; align-items:center; justify-content:center; font-size:2.5rem; }
+.photo-body { padding:14px 16px; }
+.photo-room { font-size:0.68rem; text-transform:uppercase; letter-spacing:1.5px; font-weight:600; color:#c9a84c; margin-bottom:5px; }
+.photo-desc-field { font-size:0.82rem; min-height:70px; color:#7a7468; }
+.pricing-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; margin-bottom:36px; }
+.pricing-card { background:white; border:1px solid rgba(15,14,13,0.1); border-radius:8px; padding:22px; text-align:center; }
+.pricing-platform { font-size:0.72rem; text-transform:uppercase; letter-spacing:1.5px; color:#7a7468; font-weight:600; margin-bottom:10px; }
+.pricing-range { font-size:1.7rem; font-weight:700; color:#0f0e0d; }
+.pricing-range span { font-size:0.9rem; font-weight:400; color:#7a7468; }
+.pricing-note { font-size:0.75rem; color:#7a7468; margin-top:6px; }
+.pricing-occupancy { margin-top:10px; background:#f7f4ef; border-radius:4px; padding:6px 10px; font-size:0.75rem; color:#7a7468; }
+.rules-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:20px; margin-bottom:40px; }
+.rules-card { background:white; border:1px solid rgba(15,14,13,0.1); border-radius:8px; padding:24px; }
+.rules-card h3 { font-size:1.05rem; font-weight:700; margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+.rule-item { display:flex; align-items:flex-start; gap:10px; padding:10px 0; border-bottom:1px solid rgba(15,14,13,0.1); font-size:0.85rem; }
+.rule-item:last-child { border-bottom:none; }
+.rule-icon { flex-shrink:0; font-size:1rem; margin-top:1px; }
+.faq-item { padding:14px 0; border-bottom:1px solid rgba(15,14,13,0.1); }
+.faq-item:last-child { border-bottom:none; }
+.faq-q { font-weight:600; font-size:0.85rem; margin-bottom:5px; }
+.faq-a { font-size:0.82rem; color:#7a7468; line-height:1.6; }
+/* AUDIT */
+.score-ring-wrap { display:flex; align-items:center; justify-content:center; margin-bottom:32px; gap:40px; flex-wrap:wrap; }
+.score-ring { position:relative; width:140px; height:140px; }
+.score-ring svg { transform:rotate(-90deg); }
+.score-ring-text { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; }
+.score-number { font-size:2.4rem; font-weight:900; line-height:1; }
+.score-label { font-size:0.7rem; text-transform:uppercase; letter-spacing:1.5px; color:#7a7468; font-weight:600; }
+.score-meta { flex:1; min-width:220px; }
+.score-grade { font-size:3rem; font-weight:900; line-height:1; margin-bottom:4px; }
+.score-verdict { font-size:1rem; font-weight:600; margin-bottom:8px; }
+.score-summary { font-size:0.85rem; color:#7a7468; line-height:1.6; }
+.audit-categories { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin-bottom:28px; }
+.audit-cat { background:white; border:1px solid rgba(15,14,13,0.1); border-radius:8px; padding:20px; }
+.audit-cat-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+.audit-cat-name { font-weight:600; font-size:0.9rem; display:flex; align-items:center; gap:8px; }
+.audit-cat-score { font-size:0.8rem; font-weight:700; padding:3px 10px; border-radius:20px; }
+.cat-score-good { background:#e8f5e9; color:#2e7d32; }
+.cat-score-warn { background:#fff8e1; color:#f57f17; }
+.cat-score-bad { background:#fce4ec; color:#c62828; }
+.audit-issue { display:flex; gap:10px; padding:8px 0; border-bottom:1px solid rgba(15,14,13,0.1); font-size:0.83rem; }
+.audit-issue:last-child { border-bottom:none; }
+.issue-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; margin-top:5px; }
+.dot-error { background:#b85c3a; }
+.dot-warn { background:#c9a84c; }
+.dot-ok { background:#5a8a62; }
+.issue-text { flex:1; }
+.issue-fix { font-size:0.78rem; color:#5a8a62; font-weight:500; margin-top:2px; }
+.audit-fixes { background:white; border:1px solid rgba(15,14,13,0.1); border-radius:8px; padding:24px; margin-bottom:24px; }
+.audit-fixes h3 { font-size:1.1rem; font-weight:700; margin-bottom:16px; }
+.fix-item { display:flex; gap:12px; padding:14px 0; border-bottom:1px solid rgba(15,14,13,0.1); align-items:flex-start; }
+.fix-item:last-child { border-bottom:none; }
+.fix-priority { font-size:0.68rem; text-transform:uppercase; letter-spacing:1px; font-weight:700; padding:3px 8px; border-radius:3px; flex-shrink:0; margin-top:2px; }
+.priority-high { background:#fce4ec; color:#c62828; }
+.priority-med { background:#fff8e1; color:#f57f17; }
+.priority-low { background:#e8f5e9; color:#2e7d32; }
+.fix-content { flex:1; }
+.fix-title { font-weight:600; font-size:0.88rem; margin-bottom:3px; }
+.fix-desc { font-size:0.82rem; color:#7a7468; line-height:1.55; }
+.fix-suggestion { margin-top:6px; background:#f7f4ef; border-radius:4px; padding:8px 12px; font-size:0.8rem; font-style:italic; color:#0f0e0d; border-left:3px solid #c9a84c; }
+.btn-pdf { padding:8px 18px; background:#0f0e0d; color:white; border:none; border-radius:4px; cursor:pointer; font-family:inherit; font-size:0.8rem; font-weight:500; display:none; transition:background 0.2s; }
+.btn-pdf:hover { background:#b85c3a; }
+.btn-pdf.visible { display:inline-block; }
+.fade-in { animation:fadeInUp 0.45s ease forwards; }
+.d1 { animation-delay:0.05s; opacity:0; }
+.d2 { animation-delay:0.12s; opacity:0; }
+.d3 { animation-delay:0.2s; opacity:0; }
+@media(max-width:900px) {
+  .platform-showcase { grid-template-columns:1fr; }
+  .ba-grid { grid-template-columns:1fr; }
+  .features-bento > * { grid-column:span 12 !important; }
+  .bento-8 { grid-template-columns:1fr !important; }
+  .pricing-cards { grid-template-columns:1fr; }
+  .pricing-math-row { grid-template-columns:1fr; }
+  nav .nav-links { display:none; }
+  .property-header { grid-template-columns:1fr; }
+  .ota-grid,.social-grid { grid-template-columns:1fr; }
+  .main { padding:0 20px 60px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ NAV ═══════════ -->
+<nav id="mainNav">
+  <div class="nav-logo">VR365 <span>Listing AI</span></div>
+  <div class="nav-links">
+    <a href="#features" onclick="smoothScroll(event,'features')">Features</a>
+    <a href="#comparison" onclick="smoothScroll(event,'comparison')">Before & After</a>
+    <a href="#pricing" onclick="smoothScroll(event,'pricing')">Pricing</a>
+    <a href="#tool" onclick="smoothScroll(event,'tool')">Try Free</a>
+  </div>
+  <div class="nav-cta">
+    <button class="nav-btn ghost" onclick="smoothScroll(event,'pricing')">See Pricing</button>
+    <button class="nav-btn solid" onclick="smoothScroll(event,'tool')">Get Started</button>
+    <button class="btn-pdf" id="exportPdfBtn" onclick="exportPDF()" style="border-radius:20px;">⬇ Export PDF</button>
+  </div>
+</nav>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section class="hero-section">
+  <div class="hero-eyebrow">AI-Powered Property Marketing</div>
+  <h1 class="hero-h1">
+    Your listing.<br>
+    Every platform.<br>
+    <span class="gold-text">60 seconds.</span>
+  </h1>
+  <p class="hero-sub">Stop spending 4–5 days writing listings by hand. VR365 scans your property, analyzes nearby locations, and generates perfectly optimized copy for every major OTA — all within exact character limits.</p>
+  <div class="hero-cta-row">
+    <button class="cta-primary" onclick="smoothScroll(event,'tool')">Try It Free</button>
+    <button class="cta-secondary" onclick="smoothScroll(event,'pricing')">View Pricing →</button>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <span class="stat-big">4–5 days</span>
+      <span class="stat-small">saved per listing</span>
+    </div>
+    <div class="hero-stat">
+      <span class="stat-big">6 OTAs</span>
+      <span class="stat-small">written simultaneously</span>
+    </div>
+    <div class="hero-stat">
+      <span class="stat-big">100%</span>
+      <span class="stat-small">char-limit compliant</span>
+    </div>
+    <div class="hero-stat">
+      <span class="stat-big">$0</span>
+      <span class="stat-small">copywriter fees</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ PLATFORM SHOWCASE ═══════════ -->
+<section class="showcase-section" id="features">
+  <div class="section-eyebrow reveal">Platform Intelligence</div>
+  <h2 class="section-h2 reveal reveal-delay-1">Every platform. Every limit.<br>Always perfect.</h2>
+  <p class="section-sub reveal reveal-delay-2">VR365 knows the exact character limits for every OTA and enforces them automatically. No more truncated headlines. No more missed opportunities.</p>
+
+  <div class="platform-showcase reveal">
+    <div class="platform-card">
+      <div class="platform-icon-row">
+        <span class="platform-emoji">🏠</span>
+        <span class="char-pill">50 char max</span>
+      </div>
+      <div class="platform-name">Airbnb</div>
+      <div class="platform-headline">Beachfront Gem · Steps to Pier</div>
+      <div class="char-bar-wrap">
+        <div class="char-bar"><div class="char-bar-fill" style="width:84%;background:#ff5a5f;"></div></div>
+        <span class="char-status status-ok">42/50 ✓</span>
+      </div>
+    </div>
+    <div class="platform-card">
+      <div class="platform-icon-row">
+        <span class="platform-emoji">🌴</span>
+        <span class="char-pill">75 char max</span>
+      </div>
+      <div class="platform-name">VRBO</div>
+      <div class="platform-headline">Oceanfront Family Villa | Private Pool + Steps to Beach</div>
+      <div class="char-bar-wrap">
+        <div class="char-bar"><div class="char-bar-fill" style="width:74%;background:#1a5be0;"></div></div>
+        <span class="char-status status-ok">56/75 ✓</span>
+      </div>
+    </div>
+    <div class="platform-card">
+      <div class="platform-icon-row">
+        <span class="platform-emoji">🔵</span>
+        <span class="char-pill">60 char max</span>
+      </div>
+      <div class="platform-name">Booking.com</div>
+      <div class="platform-headline">Seafront Suite · Pool · Near Venice Beach</div>
+      <div class="char-bar-wrap">
+        <div class="char-bar"><div class="char-bar-fill" style="width:70%;background:#003b95;"></div></div>
+        <span class="char-status status-ok">42/60 ✓</span>
+      </div>
+    </div>
+  </div>
+  <div class="platform-showcase reveal reveal-delay-1" style="margin-top:2px;">
+    <div class="platform-card">
+      <div class="platform-icon-row">
+        <span class="platform-emoji">🦉</span>
+        <span class="char-pill">80 char max</span>
+      </div>
+      <div class="platform-name">TripAdvisor</div>
+      <div class="platform-headline">Unforgettable Coastal Escape | Rooftop Terrace & Ocean Views</div>
+      <div class="char-bar-wrap">
+        <div class="char-bar"><div class="char-bar-fill" style="width:77%;background:#00aa6c;"></div></div>
+        <span class="char-status status-ok">62/80 ✓</span>
+      </div>
+    </div>
+    <div class="platform-card">
+      <div class="platform-icon-row">
+        <span class="platform-emoji">🔍</span>
+        <span class="char-pill">100 char max</span>
+      </div>
+      <div class="platform-name">Google Vacation Rentals</div>
+      <div class="platform-headline">Venice Beach Vacation Rental | 3BR Pool Home | Steps to Ocean, Shops & Restaurants</div>
+      <div class="char-bar-wrap">
+        <div class="char-bar"><div class="char-bar-fill" style="width:82%;background:#4285f4;"></div></div>
+        <span class="char-status status-warn">82/100 ●</span>
+      </div>
+    </div>
+    <div class="platform-card">
+      <div class="platform-icon-row">
+        <span class="platform-emoji">🏕️</span>
+        <span class="char-pill">60 char max</span>
+      </div>
+      <div class="platform-name">Hipcamp</div>
+      <div class="platform-headline">Secluded Forest Cabin · Near Yosemite</div>
+      <div class="char-bar-wrap">
+        <div class="char-bar"><div class="char-bar-fill" style="width:62%;background:#5a8a62;"></div></div>
+        <span class="char-status status-ok">37/60 ✓</span>
+      </div>
+    </div>
+
+  <!-- MORE PLATFORMS EXPANDABLE -->
+  <div class="more-platforms-wrap reveal reveal-delay-2">
+    <button class="more-platforms-btn" onclick="toggleMorePlatforms(this)">
+      <span class="mp-icon">＋</span>
+      <span class="mp-text">12 more platforms</span>
+      <span class="mp-sub">Expedia · Hotels.com · Agoda · Kayak · Marriott · and 7 more</span>
+      <span class="mp-arrow">›</span>
+    </button>
+    <div class="more-platforms-grid" id="morePlatformsGrid" style="display:none;">
+      <div class="mp-card">
+        <div class="mp-icon-row"><span class="mp-emoji">🏨</span><span class="mp-limit">120 chars</span></div>
+        <div class="mp-name">Expedia</div>
+        <div class="mp-desc">Expedia-optimized headline + full description targeting deal-seeking travellers</div>
+      </div>
+      <div class="mp-card">
+        <div class="mp-icon-row"><span class="mp-emoji">🏩</span><span class="mp-limit">100 chars</span></div>
+        <div class="mp-name">Hotels.com</div>
+        <div class="mp-desc">Hotels.com listing copy with amenity-first tone and location keywords</div>
+      </div>
+      <div class="mp-card">
+        <div class="mp-icon-row"><span class="mp-emoji">🌐</span><span class="mp-limit">80 chars</span></div>
+        <div class="mp-name">Agoda</div>
+        <div class="mp-desc">Agoda-style copy optimized for Asia-Pacific travellers with value framing</div>
+      </div>
+      <div class="mp-card">
+        <div class="mp-icon-row"><span class="mp-emoji">🔎</span><span class="mp-limit">90 chars</span></div>
+        <div class="mp-name">Kayak</div>
+        <div class="mp-desc">Kayak listing with search-first headline and comparison-friendly description</div>
+      </div>
+      <div class="mp-card">
+        <div class="mp-icon-row"><span class="mp-emoji">🏅</span><span class="mp-limit">100 chars</span></div>
+        <div class="mp-name">Homes &amp; Villas by Marriott</div>
+        <div class="mp-desc">Luxury-positioned copy matching Marriott's premium editorial tone</div>
+      </div>
+      <div class="mp-card">
+        <div class="mp-icon-row"><span class="mp-emoji">✨</span><span class="mp-limit">60 chars</span></div>
+        <div class="mp-name">Plum Guide</div>
+        <div class="mp-desc">Curated, editorial-quality copy for Plum Guide's discerning audience</div>
+      </div>
+      <div class="mp-card">
+        <div class="mp-icon-row"><span class="mp-emoji">🏡</span><span class="mp-limit">75 chars</span></div>
+        <div class="mp-name">Houfy</div>
+        <div class="mp-desc">Direct-booking focused copy that highlights owner-to-guest value and trust</div>
+      </div>
+      <div class="mp-card">
+        <div class="mp-icon-row"><span class="mp-emoji">🏘️</span><span class="mp-limit">80 chars</span></div>
+        <div class="mp-name">Vacasa</div>
+        <div class="mp-desc">Vacasa-formatted listing with professional management tone and local flavor</div>
+      </div>
+      <div class="mp-card">
+        <div class="mp-icon-row"><span class="mp-emoji">🔑</span><span class="mp-limit">75 chars</span></div>
+        <div class="mp-name">Evolve</div>
+        <div class="mp-desc">Evolve-optimized copy with transparent pricing tone and guest-first framing</div>
+      </div>
+      <div class="mp-card">
+        <div class="mp-icon-row"><span class="mp-emoji">🛋️</span><span class="mp-limit">80 chars</span></div>
+        <div class="mp-name">Furnished Finder</div>
+        <div class="mp-desc">Mid-term rental copy targeting traveling nurses, remote workers, and relocators</div>
+      </div>
+      <div class="mp-card">
+        <div class="mp-icon-row"><span class="mp-emoji">⛺</span><span class="mp-limit">60 chars</span></div>
+        <div class="mp-name">Glamping Hub</div>
+        <div class="mp-desc">Nature-escape copy for unique outdoor stays with experiential tone</div>
+      </div>
+      <div class="mp-card">
+        <div class="mp-icon-row"><span class="mp-emoji">🌈</span><span class="mp-limit">75 chars</span></div>
+        <div class="mp-name">Misterb&amp;b</div>
+        <div class="mp-desc">Inclusive, welcoming copy tailored to Misterb&b's LGBTQ+ travel community</div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ═══════════ BEFORE / AFTER ═══════════ -->
+<section class="ba-section" id="comparison">
+  <div class="ba-inner">
+    <div class="section-eyebrow reveal">Before & After</div>
+    <h2 class="section-h2 reveal reveal-delay-1">The old way was<br>costing you everything.</h2>
+    <p class="section-sub reveal reveal-delay-2">4–5 days per property. $200–500 in copywriter fees. Listings going live late, inconsistent, and never optimized. VR365 changes all of that.</p>
+    <div class="ba-grid reveal reveal-delay-3">
+      <div class="ba-col without">
+        <div class="ba-header"><span class="ba-badge">❌ Without VR365</span></div>
+        <ul class="ba-list">
+          <li class="ba-item"><span class="ba-icon">✗</span>4–5 days writing listings per property manually</li>
+          <li class="ba-item"><span class="ba-icon">✗</span>Different copy for each platform — from scratch every time</li>
+          <li class="ba-item"><span class="ba-icon">✗</span>Headlines accidentally over character limits, getting cut off</li>
+          <li class="ba-item"><span class="ba-icon">✗</span>Generic copy with no nearby attraction keywords</li>
+          <li class="ba-item"><span class="ba-icon">✗</span>No photo descriptions — guests can't visualize the space</li>
+          <li class="ba-item"><span class="ba-icon">✗</span>One platform updated, others left stale and inconsistent</li>
+          <li class="ba-item"><span class="ba-icon">✗</span>$200–500 per listing in copywriter fees</li>
+          <li class="ba-item"><span class="ba-icon">✗</span>No SEO strategy — listing buried in search</li>
+          <li class="ba-item"><span class="ba-icon">✗</span>Social media? Another 2 hours per property</li>
+          <li class="ba-item"><span class="ba-icon">✗</span>No way to audit existing listings for quality gaps</li>
+          <li class="ba-item"><span class="ba-icon">✗</span>Scale to 150 homes? Impossible with current process</li>
+        </ul>
+      </div>
+      <div class="ba-col with">
+        <div class="ba-header"><span class="ba-badge">✅ With VR365 Listing AI</span></div>
+        <ul class="ba-list">
+          <li class="ba-item"><span class="ba-icon">✓</span>Full listing package ready in <strong>60 seconds</strong></li>
+          <li class="ba-item"><span class="ba-icon">✓</span>All 6 OTAs written simultaneously in one click</li>
+          <li class="ba-item"><span class="ba-icon">✓</span><strong>Guaranteed within every platform's character limits</strong></li>
+          <li class="ba-item"><span class="ba-icon">✓</span>AI scans nearby landmarks and weaves them into every headline</li>
+          <li class="ba-item"><span class="ba-icon">✓</span>Professional room-by-room photo descriptions automatically</li>
+          <li class="ba-item"><span class="ba-icon">✓</span>All platforms updated together — always consistent</li>
+          <li class="ba-item"><span class="ba-icon">✓</span><strong>$99/month unlimited</strong> — not $200–500 per listing</li>
+          <li class="ba-item"><span class="ba-icon">✓</span>Full SEO keywords, meta tags, and search strategy included</li>
+          <li class="ba-item"><span class="ba-icon">✓</span>Instagram, Facebook, TikTok, Twitter ready to post instantly</li>
+          <li class="ba-item"><span class="ba-icon">✓</span>AI Listing Auditor scores and fixes any existing listing</li>
+          <li class="ba-item"><span class="ba-icon">✓</span>Scale to 500 properties without hiring extra staff</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FEATURES BENTO ═══════════ -->
+<section class="features-section">
+  <div class="features-inner">
+    <div class="section-eyebrow reveal">Everything included</div>
+    <h2 class="section-h2 reveal reveal-delay-1">One tool.<br>Every piece of content.</h2>
+    <p class="section-sub reveal reveal-delay-2">Stop stitching together 6 different tools. VR365 covers everything a listing needs, from first headline to SEO meta tag.</p>
+    <div class="features-bento reveal">
+      <div class="bento bento-1">
+        <span class="bento-icon">🏠</span>
+        <div class="bento-tag">OTA Copy</div>
+        <h3>6-Platform Listings</h3>
+        <p>Airbnb, VRBO, Booking.com, TripAdvisor, Google, Hipcamp — each written to that platform's exact tone, algorithm, and limits.</p>
+        <div class="bento-platforms" style="margin-top:16px;">
+          <span class="bento-pill">Airbnb 50</span><span class="bento-pill">VRBO 75</span><span class="bento-pill">Booking 60</span><span class="bento-pill">TripAdvisor 80</span><span class="bento-pill">Google 100</span><span class="bento-pill">Hipcamp 60</span>
+        </div>
+        <div class="bento-accent"></div>
+      </div>
+      <div class="bento bento-2">
+        <span class="bento-icon">📍</span>
+        <div class="bento-tag">Location Intelligence</div>
+        <h3>Nearby Location Scanning</h3>
+        <p>AI identifies your city and pulls in real local landmarks, beaches, ski resorts, neighborhoods, and hotspots — weaving them into every headline so guests find you through location searches.</p>
+        <div class="bento-accent"></div>
+      </div>
+      <div class="bento bento-3">
+        <span class="bento-icon">📏</span>
+        <div class="bento-tag">Limits</div>
+        <h3>Character Limit Intelligence</h3>
+        <p>Live counter on every headline. Turns red if you go over. AI pre-counts before generating.</p>
+        <div class="bento-accent"></div>
+      </div>
+      <div class="bento bento-4">
+        <span class="bento-icon">📸</span>
+        <div class="bento-tag">Photos</div>
+        <h3>Photo Descriptions</h3>
+        <p>Upload your actual photos and get professional room-by-room captions for every one.</p>
+        <div class="bento-accent"></div>
+      </div>
+      <div class="bento bento-5">
+        <span class="bento-icon">🩺</span>
+        <div class="bento-tag">Audit</div>
+        <h3>AI Listing Auditor</h3>
+        <p>Health score out of 100. Flags every issue. Ranked fix suggestions ready to copy.</p>
+        <div class="bento-accent"></div>
+      </div>
+      <div class="bento bento-6">
+        <span class="bento-icon">📱</span>
+        <div class="bento-tag">Social</div>
+        <h3>Social Media Captions</h3>
+        <p>Instagram, Facebook, TikTok, and Twitter/X — each platform's tone, hashtags, and format, ready to post in one click.</p>
+        <div class="bento-accent"></div>
+      </div>
+      <div class="bento bento-7">
+        <span class="bento-icon">💰</span>
+        <div class="bento-tag">Revenue</div>
+        <h3>Pricing Intelligence</h3>
+        <p>Nightly rate ranges per platform. Weekend premium. Seasonal strategy. Occupancy estimates.</p>
+        <div class="bento-accent"></div>
+      </div>
+      <div class="bento bento-8">
+        <div>
+          <span class="bento-icon">🔍</span>
+          <div class="bento-tag">SEO & Discovery</div>
+          <h3>Full SEO Suite</h3>
+          <p>Primary keywords, long-tail keywords, local keywords, title tags, and meta descriptions — all tuned to your property's location and type so guests find you through organic search.</p>
+        </div>
+        <div style="background:rgba(201,168,76,0.08);border:0.5px solid rgba(201,168,76,0.2);border-radius:12px;padding:24px;">
+          <div class="bento-number">10+</div>
+          <div style="font-size:0.85rem;color:rgba(255,255,255,0.5);line-height:1.6;">pieces of content generated per property — headlines, descriptions, photo captions, social posts, house rules, FAQ, SEO — all in one run.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ PRICING ═══════════ -->
+<section class="pricing-section" id="pricing">
+  <div class="pricing-inner">
+    <div class="section-eyebrow reveal">Simple pricing</div>
+    <h2 class="section-h2 reveal reveal-delay-1">One price.<br>Unlimited properties.</h2>
+    <p class="section-sub reveal reveal-delay-2">No per-property fees. No seat limits. One flat rate that pays for itself on the very first listing you run.</p>
+    <div class="pricing-cards reveal">
+      <div class="price-tile">
+        <div class="price-name">Free</div>
+        <div class="price-amount-big"><sup>$</sup>0<sub>/mo</sub></div>
+        <div class="price-tagline">Try VR365 with no commitment. See exactly what AI can do for your listings before spending a cent.</div>
+        <ul class="price-feats">
+          <li><span class="feat-icon">✓</span>3 listings per month</li>
+          <li><span class="feat-icon">✓</span>Airbnb + VRBO copy</li>
+          <li><span class="feat-icon">✓</span>Basic photo descriptions</li>
+          <li><span class="feat-icon">✓</span>1 listing audit per month</li>
+          <li class="off"><span class="feat-icon">✗</span>All 6 OTA platforms</li>
+          <li class="off"><span class="feat-icon">✗</span>Social media captions</li>
+          <li class="off"><span class="feat-icon">✗</span>Pricing intelligence</li>
+          <li class="off"><span class="feat-icon">✗</span>SEO & keywords</li>
+          <li class="off"><span class="feat-icon">✗</span>House rules & FAQ</li>
+          <li class="off"><span class="feat-icon">✗</span>PDF export & version history</li>
+        </ul>
+        <button class="price-cta white" onclick="smoothScroll(event,'tool')">Start for Free</button>
+        <div class="price-note">No credit card required</div>
+      </div>
+      <div class="price-tile featured">
+        <div class="popular-tag">⚡ Most Popular</div>
+        <div class="price-name">Pro</div>
+        <div class="price-amount-big"><sup>$</sup>99<sub>/mo</sub></div>
+        <div class="price-tagline">Everything you need to list faster, rank higher, and scale your portfolio — with zero per-property fees.</div>
+        <ul class="price-feats">
+          <li><span class="feat-icon">✓</span><strong>Unlimited listings</strong></li>
+          <li><span class="feat-icon">✓</span><strong>All 6 OTA platforms</strong></li>
+          <li><span class="feat-icon">✓</span>Full photo descriptions (all rooms)</li>
+          <li><span class="feat-icon">✓</span><strong>Unlimited listing audits</strong></li>
+          <li><span class="feat-icon">✓</span>Social media (Instagram, Facebook, TikTok, Twitter)</li>
+          <li><span class="feat-icon">✓</span>Pricing intelligence per platform</li>
+          <li><span class="feat-icon">✓</span>SEO keywords & meta tags</li>
+          <li><span class="feat-icon">✓</span>House rules & guest FAQ</li>
+          <li><span class="feat-icon">✓</span>Version history & compare</li>
+          <li><span class="feat-icon">✓</span>PDF export + priority support</li>
+        </ul>
+        <button class="price-cta gold" onclick="smoothScroll(event,'tool')">Get Pro — $99/mo →</button>
+        <div class="price-note">Cancel anytime · No contracts</div>
+      </div>
+    </div>
+    <div class="pricing-math-row reveal">
+      <div class="math-left">
+        <h4>💡 The math is undeniable</h4>
+        <p>If you manage 10 properties, you're saving 40–50 days of writing per year. A freelance copywriter charges $200–$500 per listing. Just 10 listings × $200 = $2,000 in fees — vs $99/month for unlimited. VR365 pays for itself on listing number one.</p>
+      </div>
+      <div class="math-right">
+        <div class="math-saving">20×</div>
+        <div class="math-saving-sub">cheaper than hiring<br>a copywriter</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ TOOL ═══════════ -->
+<section class="tool-reveal-section" id="tool">
+  <div class="tool-reveal-inner">
+    <div class="section-eyebrow" style="justify-content:center;">Try it now — free</div>
+    <h2 class="section-h2" style="text-align:center;margin-bottom:8px;">Paste a URL.<br>Get everything.</h2>
+    <p class="section-sub" style="text-align:center;margin-bottom:40px;margin-left:auto;margin-right:auto;">Your full listing package — all platforms, all limits respected, nearby locations included — in under 60 seconds.</p>
+    <div class="url-form">
+      <input type="text" id="urlInput" placeholder="Paste any property URL to get started…" />
+      <button id="analyzeBtn" onclick="analyzeListing()">Analyze →</button>
+    </div>
+    <div class="photo-upload-area" id="uploadArea" onclick="document.getElementById('photoFileInput').click()" ondragover="handleDragOver(event)" ondrop="handleDrop(event)" ondragleave="this.classList.remove('drag-over')">
+      <p><strong>📸 Upload property photos</strong> — drag & drop or click to browse</p>
+      <p style="margin-top:4px;">AI will describe each photo specifically</p>
+      <div class="photo-thumbnails" id="photoThumbnails"></div>
+      <input type="file" id="photoFileInput" multiple accept="image/*" onchange="handlePhotoFiles(this.files)" />
+    </div>
+    <div class="hint">Works with <span>Airbnb</span> <span>VRBO</span> <span>Zillow</span> <span>Realtor.com</span> <span>Any URL</span></div>
+  </div>
+</section>
+
+<!-- ═══════════ TOOL RESULTS ═══════════ -->
+<div class="tool-bg">
+  <div class="main">
+
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <div class="loading-title">Analyzing your property…</div>
+    <div class="loading-sub" id="loadingSub">Getting started</div>
+    <div class="progress-steps">
+      <div class="step-pill" id="s1">🔍 Fetching listing</div>
+      <div class="step-pill" id="s2">📸 Analyzing photos</div>
+      <div class="step-pill" id="s3">💰 Pricing research</div>
+      <div class="step-pill" id="s4">✍️ Writing copy</div>
+      <div class="step-pill" id="s5">📱 Social captions</div>
+      <div class="step-pill" id="s6">📋 Rules & FAQ</div>
+    </div>
+  </div>
+
+  <div class="error-box" id="errorBox">
+    <h3>⚠️ Something went wrong</h3>
+    <p id="errorMsg">We couldn't analyze that URL. Please try a different link.</p>
+  </div>
+
+  <div class="results" id="results">
+
+    <!-- Property Header -->
+    <div class="property-header fade-in" id="propHeader">
+      <div>
+        <h2 id="propTitle">—</h2>
+        <div class="prop-address" id="propAddress">—</div>
+        <div class="prop-badges" id="propBadges"></div>
+      </div>
+      <div class="prop-actions">
+        <button class="btn-outline-white" onclick="exportPDF()">⬇ Export PDF</button>
+        <button class="btn-outline-white" onclick="copyAllOTA()">📋 Copy All OTA</button>
+        <button class="btn-outline-white" onclick="regenerateAll()">🔄 Regenerate</button>
+      </div>
+    </div>
+
+    <!-- Versions -->
+    <div class="versions-bar fade-in d1">
+      <div class="versions-list" id="versionsList">
+        <div class="version-chip active" onclick="switchVersion(0)">Version 1</div>
+      </div>
+      <button class="btn-new-version" onclick="regenerateNew()">+ New Version</button>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs-nav fade-in d1">
+      <button class="tab-btn active" onclick="switchTab('ota', this)">🏠 OTA Listings</button>
+      <button class="tab-btn" onclick="switchTab('social', this)">📱 Social Media</button>
+      <button class="tab-btn" onclick="switchTab('photos', this)">📸 Photo Descriptions</button>
+      <button class="tab-btn" onclick="switchTab('pricing', this)">💰 Pricing</button>
+      <button class="tab-btn" onclick="switchTab('rules', this)">📋 Rules & FAQ</button>
+      <button class="tab-btn" onclick="switchTab('seo', this)">🔍 SEO</button>
+      <button class="tab-btn" onclick="switchTab('audit', this)">🩺 Listing Audit</button>
+    </div>
+
+    <!-- OTA TAB -->
+    <div class="tab-panel active" id="tab-ota">
+      <div class="section-label">Platform-optimized marketing copy</div>
+      <div class="ota-grid" id="otaGrid"></div>
+    </div>
+
+    <!-- SOCIAL TAB -->
+    <div class="tab-panel" id="tab-social">
+      <div class="section-label">Social media captions</div>
+      <div class="social-grid" id="socialGrid"></div>
+    </div>
+
+    <!-- PHOTOS TAB -->
+    <div class="tab-panel" id="tab-photos">
+      <div class="section-label">Room-by-room photo descriptions</div>
+      <div class="photos-grid" id="photosGrid"></div>
+    </div>
+
+    <!-- PRICING TAB -->
+    <div class="tab-panel" id="tab-pricing">
+      <div class="section-label">Suggested pricing by platform</div>
+      <div class="pricing-grid" id="pricingGrid"></div>
+      <div style="background:white;border:1px solid var(--border);border-radius:8px;padding:24px;" id="pricingNotes"></div>
+    </div>
+
+    <!-- RULES & FAQ TAB -->
+    <div class="tab-panel" id="tab-rules">
+      <div class="section-label">House rules, policies & guest FAQ</div>
+      <div class="rules-grid" id="rulesGrid"></div>
+    </div>
+
+    <!-- SEO TAB -->
+    <div class="tab-panel" id="tab-seo">
+      <div class="section-label">SEO keywords & search optimization</div>
+      <div id="seoContent"></div>
+    </div>
+
+
+    <!-- AUDIT TAB -->
+    <div class="tab-panel" id="tab-audit">
+      <div class="section-label">AI listing health audit &amp; fix suggestions</div>
+      <div id="auditInputArea" style="background:white;border:1px solid var(--border);border-radius:10px;padding:28px;margin-bottom:28px;">
+        <div style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;margin-bottom:6px;">&#x1F9FA; Audit Any Listing</div>
+        <div style="font-size:0.85rem;color:var(--text-muted);margin-bottom:18px;">Paste any live listing URL to get a full health score, mistakes found, and AI-powered fix suggestions.</div>
+        <div style="display:flex;gap:0;border:2px solid var(--ink);border-radius:4px;overflow:hidden;">
+          <input id="auditUrlInput" type="text" placeholder="Paste Airbnb, VRBO, or any listing URL to audit…"
+            style="flex:1;padding:13px 18px;border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:0.9rem;" />
+          <button onclick="runAudit()" id="auditBtn"
+            style="padding:13px 24px;background:var(--ink);color:white;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:600;white-space:nowrap;">
+            Run Audit &#x2192;
+          </button>
+        </div>
+        <div style="margin-top:10px;font-size:0.75rem;color:var(--text-muted);">Or <a href="#" onclick="useCurrentForAudit(event)" style="color:var(--gold);font-weight:600;text-decoration:none;">use the listing already analyzed above</a></div>
+      </div>
+      <div id="auditLoading" style="display:none;text-align:center;padding:48px 0;">
+        <div class="spinner"></div>
+        <div style="font-family:'Playfair Display',serif;font-size:1.1rem;margin-top:12px;">Auditing your listing…</div>
+        <div id="auditLoadingSub" style="font-size:0.82rem;color:var(--text-muted);margin-top:6px;">Scanning for issues</div>
+      </div>
+      <div id="auditResults" style="display:none;"></div>
+    </div>
+
+  </div><!-- /results -->
+</div><!-- /main -->
+</div>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer>
+  <div class="footer-logo">VR365 <span>Listing AI</span></div>
+  <div class="footer-links">
+    <a href="#features" onclick="smoothScroll(event,'features')">Features</a>
+    <a href="#comparison" onclick="smoothScroll(event,'comparison')">Before & After</a>
+    <a href="#pricing" onclick="smoothScroll(event,'pricing')">Pricing</a>
+    <a href="#tool" onclick="smoothScroll(event,'tool')">Try Free</a>
+  </div>
+  <div class="footer-copy">© 2025 VR365 Listing AI · Property Marketing Suite · All rights reserved</div>
+</footer>
+
+<script>
+// ─── STATE ───────────────────────────────────────────────────────────────────
+let currentUrl = '';
+let uploadedPhotos = []; // base64 strings
+let allVersions = [];
+let activeVersion = 0;
+
+// ─── PHOTO UPLOAD ─────────────────────────────────────────────────────────────
+function handleDragOver(e) { e.preventDefault(); document.getElementById('uploadArea').classList.add('drag-over'); }
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('uploadArea').classList.remove('drag-over');
+  handlePhotoFiles(e.dataTransfer.files);
+}
+function handlePhotoFiles(files) {
+  const thumbs = document.getElementById('photoThumbnails');
+  Array.from(files).forEach(file => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      uploadedPhotos.push(e.target.result);
+      const img = document.createElement('img');
+      img.className = 'photo-thumb';
+      img.src = e.target.result;
+      thumbs.appendChild(img);
+    };
+    reader.readAsDataURL(file);
+  });
+  const area = document.getElementById('uploadArea');
+  setTimeout(() => {
+    const p = area.querySelector('p');
+    p.innerHTML = `<strong>📸 ${uploadedPhotos.length} photo${uploadedPhotos.length>1?'s':''} ready</strong> <span class="photo-count-badge">${uploadedPhotos.length}</span>`;
+  }, 200);
+}
+
+// ─── MAIN ANALYZE ─────────────────────────────────────────────────────────────
+async function analyzeListing() {
+  const url = document.getElementById('urlInput').value.trim();
+  if (!url && uploadedPhotos.length === 0) { alert('Please paste a URL or upload photos.'); return; }
+  currentUrl = url || 'property from uploaded photos';
+
+  document.getElementById('loading').classList.add('active');
+  document.getElementById('results').classList.remove('active');
+  document.getElementById('errorBox').classList.remove('active');
+  document.getElementById('analyzeBtn').disabled = true;
+  document.getElementById('analyzeBtn').textContent = 'Analyzing…';
+
+  setStep(0);
+  try {
+    const data = await fetchAllData(url);
+    allVersions = [data];
+    activeVersion = 0;
+    renderResults(data);
+    renderVersionChips();
+    document.getElementById('exportPdfBtn').classList.add('visible');
+  } catch(err) {
+    showError(err.message);
+  } finally {
+    document.getElementById('loading').classList.remove('active');
+    document.getElementById('analyzeBtn').disabled = false;
+    document.getElementById('analyzeBtn').textContent = 'Analyze →';
+  }
+}
+
+async function regenerateAll() { await analyzeListing(); }
+
+async function regenerateNew() {
+  document.getElementById('analyzeBtn').disabled = true;
+  document.getElementById('loading').classList.add('active');
+  setStep(0);
+  try {
+    const data = await fetchAllData(currentUrl);
+    allVersions.push(data);
+    activeVersion = allVersions.length - 1;
+    renderResults(data);
+    renderVersionChips();
+  } catch(err) { showError(err.message); }
+  finally {
+    document.getElementById('loading').classList.remove('active');
+    document.getElementById('analyzeBtn').disabled = false;
+  }
+}
+
+function switchVersion(i) {
+  activeVersion = i;
+  renderResults(allVersions[i]);
+  renderVersionChips();
+}
+
+function renderVersionChips() {
+  const list = document.getElementById('versionsList');
+  list.innerHTML = allVersions.map((_, i) =>
+    `<div class="version-chip ${i===activeVersion?'active':''}" onclick="switchVersion(${i})">Version ${i+1}</div>`
+  ).join('');
+}
+
+// ─── STEPS ────────────────────────────────────────────────────────────────────
+const STEPS = ['s1','s2','s3','s4','s5','s6'];
+const STEP_LABELS = ['Fetching listing details…','Analyzing photos…','Researching pricing…','Writing OTA copy…','Crafting social captions…','Generating rules & FAQ…'];
+function setStep(i) {
+  STEPS.forEach((s, idx) => {
+    const el = document.getElementById(s);
+    el.className = 'step-pill' + (idx < i ? ' done' : idx === i ? ' active' : '');
+  });
+  document.getElementById('loadingSub').textContent = STEP_LABELS[i] || 'Finishing up…';
+}
+
+// ─── API CALL ─────────────────────────────────────────────────────────────────
+async function fetchAllData(url) {
+  setStep(0); await sleep(500);
+  setStep(1); await sleep(500);
+  setStep(2); await sleep(400);
+  setStep(3);
+
+  const hasPhotos = uploadedPhotos.length > 0;
+  const photoNote = hasPhotos ? `The user has uploaded ${uploadedPhotos.length} real property photos. Describe them as actual rooms based on typical vacation rental photography.` : '';
+
+  const prompt = `You are an expert vacation rental and real estate copywriter with deep knowledge of every major OTA platform's exact character limits and search algorithms.
+
+URL: ${url || 'vacation rental property'}
+${photoNote}
+
+CRITICAL — PLATFORM CHARACTER LIMITS YOU MUST STRICTLY FOLLOW:
+- Airbnb title: MAXIMUM 50 characters (count every character including spaces)
+- VRBO title: MAXIMUM 75 characters
+- Booking.com title: MAXIMUM 60 characters
+- TripAdvisor title: MAXIMUM 80 characters
+- Google Vacation Rentals title: MAXIMUM 100 characters
+- Hipcamp title: MAXIMUM 60 characters
+
+NEARBY LOCATION STRATEGY:
+Identify the city/region from the URL or property details. Then use nearby landmarks, attractions, neighborhoods, beaches, mountains, parks, restaurants, entertainment districts, airports, or well-known local areas to make headlines more searchable and compelling. Guests search for locations, not just property features. Example: if in Miami, reference "South Beach", "Wynwood", "Brickell" etc. If in the mountains, reference nearby ski resorts, trails, lakes. WEAVE these local hooks into the headlines naturally.
+
+For each platform write the most compelling headline possible that:
+1. Uses nearby location/attraction keywords guests actually search for
+2. Highlights the single strongest property feature
+3. NEVER exceeds the character limit — verify character count before returning
+4. Matches that platform's specific tone and search behavior
+
+Return ONLY valid JSON (no markdown, no backticks):
+
+{
+  "property": {
+    "title": "Evocative property name",
+    "address": "City, State",
+    "type": "Property type",
+    "bedrooms": 3,
+    "bathrooms": 2,
+    "guests": 6,
+    "sqft": 1800,
+    "highlights": ["highlight1","highlight2","highlight3","highlight4","highlight5"],
+    "nearbyAttractions": ["attraction1","attraction2","attraction3","attraction4","attraction5"]
+  },
+  "otas": [
+    {
+      "platform": "Airbnb",
+      "icon": "🏠",
+      "colorClass": "airbnb",
+      "charLimit": 50,
+      "headline": "MUST BE 50 CHARS OR LESS. Warm, experience-driven. Use nearby landmark. Example: 'Beachfront Gem · Steps to Pier · Sleeps 6'",
+      "headlineCharCount": 42,
+      "shortDesc": "2-sentence hook matching Airbnb's warm community tone. Reference local neighborhood or attraction.",
+      "fullBody": "Full 4-5 sentence Airbnb listing. Warm story-driven tone. Mention neighborhood, nearby attractions, what guests will experience.",
+      "tags": ["Entire home","Self check-in","Great location"]
+    },
+    {
+      "platform": "VRBO",
+      "icon": "🌴",
+      "colorClass": "vrbo",
+      "charLimit": 75,
+      "headline": "MUST BE 75 CHARS OR LESS. Family-vacation focused. Use nearby destination or landmark.",
+      "headlineCharCount": 68,
+      "shortDesc": "2-sentence family vacation hook. Reference nearby family attractions.",
+      "fullBody": "Full VRBO description 4-5 sentences. Family-focused, space, safety, group amenities, nearby kid-friendly spots.",
+      "tags": ["Family friendly","Full kitchen","Private yard"]
+    },
+    {
+      "platform": "Booking.com",
+      "icon": "🔵",
+      "colorClass": "booking",
+      "charLimit": 60,
+      "headline": "MUST BE 60 CHARS OR LESS. Amenity + location focused. Clear and factual.",
+      "headlineCharCount": 55,
+      "shortDesc": "2-sentence amenity-focused hook. Mention proximity to city center or transport.",
+      "fullBody": "Full Booking.com description 4-5 sentences. Factual, amenity-forward, check-in info, nearby transport/landmarks.",
+      "tags": ["Free WiFi","Kitchen","Parking"]
+    },
+    {
+      "platform": "TripAdvisor",
+      "icon": "🦉",
+      "colorClass": "tripadvisor",
+      "charLimit": 80,
+      "headline": "MUST BE 80 CHARS OR LESS. Experience and memory-making tone. Reference local experiences.",
+      "headlineCharCount": 74,
+      "shortDesc": "2-sentence experience hook. Reference local dining, culture, or adventure.",
+      "fullBody": "Full TripAdvisor 4-5 sentences. Experience tone, local gems nearby, what makes this destination special.",
+      "tags": ["Top rated","Unique experience","Local gems nearby"]
+    },
+    {
+      "platform": "Google Vacation Rentals",
+      "icon": "🔍",
+      "colorClass": "google",
+      "charLimit": 100,
+      "headline": "MUST BE 100 CHARS OR LESS. SEO-optimized, pack in location keywords and key amenities.",
+      "headlineCharCount": 92,
+      "shortDesc": "2-sentence search-optimized hook with high-value keywords.",
+      "fullBody": "Full description optimized for Google. Include location keywords, amenity keywords, neighborhood name.",
+      "tags": ["Entire property","Verified host","Instant book"]
+    },
+    {
+      "platform": "Hipcamp",
+      "icon": "🏕️",
+      "colorClass": "hipcamp",
+      "charLimit": 60,
+      "headline": "MUST BE 60 CHARS OR LESS. Nature, outdoor, escape-focused. Reference nearby outdoor attraction.",
+      "headlineCharCount": 54,
+      "shortDesc": "2-sentence outdoor/escape hook. Reference trail, lake, forest, or natural feature nearby.",
+      "fullBody": "Full Hipcamp description. Nature-escape tone, outdoor activities nearby, stargazing, hiking, wildlife.",
+      "tags": ["Nature retreat","Outdoor dining","Stargazing"]
+,
+    {
+      "platform": "Expedia",
+      "icon": "🏨",
+      "colorClass": "expedia",
+      "charLimit": 120,
+      "headline": "MUST BE 120 CHARS OR LESS. Deal-seeker friendly, value + location focused.",
+      "headlineCharCount": 95,
+      "shortDesc": "2-sentence Expedia hook. Value, amenities, easy booking.",
+      "fullBody": "Full Expedia description 4-5 sentences. Amenity-rich, location keywords, ideal for travellers comparing options.",
+      "tags": ["Free cancellation","Kitchen","Great location"]
+    },
+    {
+      "platform": "Hotels.com",
+      "icon": "🏩",
+      "colorClass": "hotelscom",
+      "charLimit": 100,
+      "headline": "MUST BE 100 CHARS OR LESS. Amenity-first headline with location.",
+      "headlineCharCount": 82,
+      "shortDesc": "2-sentence Hotels.com hook. Comfort and convenience focused.",
+      "fullBody": "Full Hotels.com description 4-5 sentences. Highlight room quality, kitchen, comfort, local area.",
+      "tags": ["Full kitchen","Self check-in","City center"]
+    },
+    {
+      "platform": "Agoda",
+      "icon": "🌐",
+      "colorClass": "agoda",
+      "charLimit": 80,
+      "headline": "MUST BE 80 CHARS OR LESS. Value-forward for Asia-Pacific travellers.",
+      "headlineCharCount": 65,
+      "shortDesc": "2-sentence Agoda hook. Value and location for international travellers.",
+      "fullBody": "Full Agoda description. Factual, value-driven, location details prominent.",
+      "tags": ["Great value","Airport nearby","Free WiFi"]
+    },
+    {
+      "platform": "Kayak",
+      "icon": "🔎",
+      "colorClass": "kayak",
+      "charLimit": 90,
+      "headline": "MUST BE 90 CHARS OR LESS. Search-first, comparison-friendly headline.",
+      "headlineCharCount": 74,
+      "shortDesc": "2-sentence Kayak hook. Clear value proposition for comparison shoppers.",
+      "fullBody": "Full Kayak description. Clean, factual, easy to skim. Best features upfront.",
+      "tags": ["Best price","Flexible dates","Instant book"]
+    },
+    {
+      "platform": "Homes & Villas by Marriott",
+      "icon": "🏅",
+      "colorClass": "marriott",
+      "charLimit": 100,
+      "headline": "MUST BE 100 CHARS OR LESS. Luxury editorial tone. Premium positioning.",
+      "headlineCharCount": 86,
+      "shortDesc": "2-sentence premium hook. Sophisticated, aspirational tone.",
+      "fullBody": "Full Marriott Homes & Villas description. Luxury tone, premium amenities, curated local experiences. Editorial quality.",
+      "tags": ["Premium home","Luxury amenities","Curated experience"]
+    },
+    {
+      "platform": "Plum Guide",
+      "icon": "✨",
+      "colorClass": "plumguide",
+      "charLimit": 60,
+      "headline": "MUST BE 60 CHARS OR LESS. Curated, editorial headline. Discerning traveller tone.",
+      "headlineCharCount": 48,
+      "shortDesc": "2-sentence editorial hook. Quality-obsessed, discerning tone.",
+      "fullBody": "Full Plum Guide description. Only the top 3% of homes. Curated quality tone, specific design details, authentic local feel.",
+      "tags": ["Handpicked","Design-led","Exceptional quality"]
+    },
+    {
+      "platform": "Houfy",
+      "icon": "🏡",
+      "colorClass": "houfy",
+      "charLimit": 75,
+      "headline": "MUST BE 75 CHARS OR LESS. Direct booking, owner-to-guest trust tone.",
+      "headlineCharCount": 60,
+      "shortDesc": "2-sentence direct booking hook. No middleman, owner pride.",
+      "fullBody": "Full Houfy description. Direct booking value, no platform fees, owner responsiveness, personal touch.",
+      "tags": ["Book direct","No fees","Owner managed"]
+    },
+    {
+      "platform": "Vacasa",
+      "icon": "🏘️",
+      "colorClass": "vacasa",
+      "charLimit": 80,
+      "headline": "MUST BE 80 CHARS OR LESS. Professional management tone with local flavor.",
+      "headlineCharCount": 65,
+      "shortDesc": "2-sentence Vacasa hook. Professional, trustworthy management tone.",
+      "fullBody": "Full Vacasa description. Professional managed property, consistent standards, local area highlights.",
+      "tags": ["Professionally managed","24/7 support","Local expertise"]
+    },
+    {
+      "platform": "Evolve",
+      "icon": "🔑",
+      "colorClass": "evolve",
+      "charLimit": 75,
+      "headline": "MUST BE 75 CHARS OR LESS. Transparent, guest-first, no-surprises tone.",
+      "headlineCharCount": 58,
+      "shortDesc": "2-sentence Evolve hook. Transparent pricing, easy experience.",
+      "fullBody": "Full Evolve description. Guest-first tone, transparent pricing, what you see is what you get.",
+      "tags": ["No hidden fees","Easy booking","Responsive host"]
+    },
+    {
+      "platform": "Furnished Finder",
+      "icon": "🛋️",
+      "colorClass": "furnishedfinder",
+      "charLimit": 80,
+      "headline": "MUST BE 80 CHARS OR LESS. Mid-term rental headline targeting workers and relocators.",
+      "headlineCharCount": 66,
+      "shortDesc": "2-sentence mid-term hook. Traveling nurses, remote workers, relocators.",
+      "fullBody": "Full Furnished Finder description. 30+ day stays, fully furnished, work-from-home setup, utilities, flexible lease.",
+      "tags": ["30+ day stays","Work desk","All utilities included"]
+    },
+    {
+      "platform": "Glamping Hub",
+      "icon": "⛺",
+      "colorClass": "glampinghub",
+      "charLimit": 60,
+      "headline": "MUST BE 60 CHARS OR LESS. Outdoor escape, nature-immersive headline.",
+      "headlineCharCount": 48,
+      "shortDesc": "2-sentence glamping hook. Unique outdoor experience, nature immersion.",
+      "fullBody": "Full Glamping Hub description. Unique stay, nature connection, outdoor activities, stargazing, disconnect-to-reconnect tone.",
+      "tags": ["Unique stay","Nature retreat","Off the beaten path"]
+    },
+    {
+      "platform": "Misterb&b",
+      "icon": "🌈",
+      "colorClass": "misterbnb",
+      "charLimit": 75,
+      "headline": "MUST BE 75 CHARS OR LESS. Inclusive, welcoming headline for LGBTQ+ travellers.",
+      "headlineCharCount": 60,
+      "shortDesc": "2-sentence inclusive hook. Safe, welcoming, affirming tone.",
+      "fullBody": "Full Misterb&b description. Inclusive and welcoming tone, LGBTQ+-friendly neighborhood highlights, safe and affirming stay.",
+      "tags": ["LGBTQ+ friendly","Safe space","Welcoming host"]
+    }
+  ],
+  "social": [
+    {
+      "platform": "Instagram",
+      "icon": "📸",
+      "caption": "Evocative Instagram caption with 3-4 sentences, lifestyle-focused, ends with 10 relevant hashtags on new line"
+    },
+    {
+      "platform": "Facebook",
+      "icon": "👥",
+      "caption": "Facebook post 3-4 sentences. Community/family tone. Include a question to drive engagement. No hashtags."
+    },
+    {
+      "platform": "TikTok",
+      "icon": "🎵",
+      "caption": "TikTok caption 1-2 punchy sentences. Hook + call to action. 5 trending hashtags."
+    },
+    {
+      "platform": "Twitter / X",
+      "icon": "🐦",
+      "caption": "Tweet under 240 chars. Witty and punchy. 2-3 hashtags."
+    }
+  ],
+  "photos": [
+    { "room": "Living Room", "emoji": "🛋️", "description": "Evocative 2-3 sentence description of living room photo for listing" },
+    { "room": "Master Bedroom", "emoji": "🛏️", "description": "Master bedroom photo description" },
+    { "room": "Guest Bedroom", "emoji": "🛏️", "description": "Guest bedroom photo description" },
+    { "room": "Kitchen", "emoji": "🍳", "description": "Kitchen photo description" },
+    { "room": "Primary Bathroom", "emoji": "🚿", "description": "Bathroom photo description" },
+    { "room": "Dining Area", "emoji": "🍽️", "description": "Dining area photo description" },
+    { "room": "Outdoor / Patio", "emoji": "🌿", "description": "Outdoor space photo description" },
+    { "room": "View / Surroundings", "emoji": "🌅", "description": "View or surroundings description" }
+  ],
+  "pricing": {
+    "platforms": [
+      { "name": "Airbnb", "low": 185, "high": 265, "avg": 220, "occupancy": "72%" },
+      { "name": "VRBO", "low": 195, "high": 280, "avg": 235, "occupancy": "68%" },
+      { "name": "Booking.com", "low": 175, "high": 250, "avg": 210, "occupancy": "65%" },
+      { "name": "Direct Book", "low": 160, "high": 240, "avg": 200, "occupancy": "80%" }
+    ],
+    "notes": "Pricing strategy note: 2-3 sentences about seasonal adjustments, weekend premiums, and revenue optimization tips.",
+    "seasonalTip": "Peak season advice for this location.",
+    "weekendPremium": "15-20%"
+  },
+  "rules": {
+    "checkIn": "4:00 PM",
+    "checkOut": "11:00 AM",
+    "items": [
+      { "icon": "🚭", "rule": "No smoking anywhere on the property" },
+      { "icon": "🐾", "rule": "Pets welcome with prior approval ($25/night fee)" },
+      { "icon": "🎉", "rule": "No parties or events without prior written approval" },
+      { "icon": "🔇", "rule": "Quiet hours 10 PM – 8 AM" },
+      { "icon": "🔑", "rule": "Self check-in via smart lock — code sent 24h before arrival" },
+      { "icon": "🧹", "rule": "Please leave the property tidy — basic cleaning required" },
+      { "icon": "👥", "rule": "Maximum occupancy strictly enforced" },
+      { "icon": "🚗", "rule": "2 parking spaces available in driveway" }
+    ],
+    "faq": [
+      { "q": "Is the WiFi fast enough for remote work?", "a": "Yes, we have 500 Mbps fiber internet throughout the property." },
+      { "q": "Is the property accessible?", "a": "The main floor is fully accessible. Please contact us for specific needs." },
+      { "q": "Are there nearby grocery stores?", "a": "A Whole Foods and local farmers market are within 10 minutes." },
+      { "q": "What's included in the kitchen?", "a": "Fully stocked with cookware, appliances, spices, coffee, and basic pantry items." },
+      { "q": "Is there a minimum stay?", "a": "2 nights on weekdays, 3 nights on weekends and holidays." },
+      { "q": "How do I get early or late check-out?", "a": "We accommodate when possible — message us at least 48h in advance." }
+    ]
+  },
+  "seo": {
+    "primaryKeywords": ["keyword1","keyword2","keyword3","keyword4","keyword5"],
+    "longTailKeywords": ["long tail 1","long tail 2","long tail 3","long tail 4"],
+    "localKeywords": ["local1","local2","local3"],
+    "titleTag": "SEO-optimized title tag under 60 chars",
+    "metaDescription": "Meta description under 155 chars with primary keywords",
+    "tips": ["SEO tip 1","SEO tip 2","SEO tip 3"]
+  }
+}`;
+
+  setStep(4);
+  const response = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      messages: [{ role: 'user', content: prompt }]
+    })
+  });
+
+  if (!response.ok) throw new Error('API error — please try again.');
+  const apiData = await response.json();
+  const text = apiData.content.map(b => b.text || '').join('');
+
+  setStep(5);
+  await sleep(400);
+
+  let parsed;
+  try { parsed = JSON.parse(text.replace(/```json|```/g,'').trim()); }
+  catch { throw new Error('Could not parse response. Please try again.'); }
+  return parsed;
+}
+
+// ─── RENDER ───────────────────────────────────────────────────────────────────
+function renderResults(data) {
+  const { property, otas, social, photos, pricing, rules, seo } = data;
+
+  // Header
+  document.getElementById('propTitle').textContent = property.title;
+  document.getElementById('propAddress').textContent = `${property.address} · ${property.type}`;
+  const badgesEl = document.getElementById('propBadges');
+  badgesEl.innerHTML = '';
+  [`${property.bedrooms} bed`,`${property.bathrooms} bath`,`${property.guests} guests`,`${property.sqft||'—'} sqft`,...(property.highlights||[]).slice(0,2)]
+    .forEach((b,i) => { const el = document.createElement('span'); el.className='badge'+(i===0?' gold':''); el.textContent=b; badgesEl.appendChild(el); });
+
+  // OTA
+  const otaGrid = document.getElementById('otaGrid');
+  otaGrid.innerHTML = '';
+  otas.forEach(o => {
+    otaGrid.innerHTML += `
+    <div class="ota-card ${o.colorClass}">
+      <div class="ota-card-header">
+        <div class="ota-name"><div class="ota-icon">${o.icon}</div>${o.platform}</div>
+        <div class="ota-meta">${(o.headline||'').length} chars headline</div>
+      </div>
+      <div class="ota-body">
+        <div class="editable-field">
+          <div class="editable-label">Headline</div>
+          <textarea class="editable ota-headline-field">${o.headline||''}</textarea>
+        </div>
+        <div class="editable-field" style="margin-top:10px;">
+          <div class="editable-label">Short description</div>
+          <textarea class="editable ota-desc-field">${o.shortDesc||''}</textarea>
+        </div>
+        <div class="editable-field" style="margin-top:10px;">
+          <div class="editable-label">Full listing body</div>
+          <textarea class="editable ota-fullbody-field">${o.fullBody||''}</textarea>
+        </div>
+        <div class="ota-tags">${(o.tags||[]).map(t=>`<span class="ota-tag">${t}</span>`).join('')}</div>
+        <div class="ota-actions">
+          <button class="copy-btn" onclick="copyFieldAbove(this, 2)">Copy headline</button>
+          <button class="copy-btn" onclick="copyFieldAbove(this, 1)">Copy full</button>
+        </div>
+      </div>
+    </div>`;
+  });
+
+  // Social
+  const socialGrid = document.getElementById('socialGrid');
+  socialGrid.innerHTML = '';
+  (social||[]).forEach(s => {
+    socialGrid.innerHTML += `
+    <div class="social-card">
+      <div class="social-header">
+        <div class="social-icon">${s.icon}</div>
+        <div class="social-platform">${s.platform}</div>
+      </div>
+      <div class="social-body">
+        <div class="social-caption" contenteditable="true">${s.caption||''}</div>
+        <button class="copy-btn" style="margin-top:12px;width:100%;" onclick="copyParentText(this)">Copy caption</button>
+      </div>
+    </div>`;
+  });
+
+  // Photos
+  const photosGrid = document.getElementById('photosGrid');
+  photosGrid.innerHTML = '';
+  const photoItems = photos || [];
+  // If user uploaded photos, show them; else show placeholders
+  photoItems.forEach((p, i) => {
+    const imgHtml = uploadedPhotos[i]
+      ? `<img class="photo-img" src="${uploadedPhotos[i]}" alt="${p.room}" />`
+      : `<div class="photo-placeholder">${p.emoji}</div>`;
+    photosGrid.innerHTML += `
+    <div class="photo-card">
+      <div class="photo-img-wrap">${imgHtml}</div>
+      <div class="photo-body">
+        <div class="photo-room">${p.room}</div>
+        <textarea class="editable photo-desc-field">${p.description||''}</textarea>
+        <button class="copy-btn" style="margin-top:10px;width:100%;" onclick="copyFieldAbove(this, 1)">Copy description</button>
+      </div>
+    </div>`;
+  });
+
+  // Pricing
+  const pGrid = document.getElementById('pricingGrid');
+  pGrid.innerHTML = '';
+  (pricing?.platforms||[]).forEach(p => {
+    pGrid.innerHTML += `
+    <div class="pricing-card">
+      <div class="pricing-platform">${p.name}</div>
+      <div class="pricing-range">$${p.low}–$${p.high}<span>/night</span></div>
+      <div class="pricing-note">Avg $${p.avg}/night</div>
+      <div class="pricing-occupancy">Est. occupancy: ${p.occupancy}</div>
+    </div>`;
+  });
+  const pNotes = document.getElementById('pricingNotes');
+  pNotes.innerHTML = `
+    <h3 style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;margin-bottom:14px;">📊 Revenue Strategy</h3>
+    <p style="font-size:0.88rem;color:var(--text-muted);line-height:1.7;margin-bottom:12px;">${pricing?.notes||''}</p>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;">
+      <div style="background:var(--cream);padding:12px 18px;border-radius:6px;font-size:0.82rem;">
+        <strong>Weekend Premium</strong><br><span style="color:var(--gold);font-size:1.1rem;font-weight:700;">${pricing?.weekendPremium||'15-20%'}</span>
+      </div>
+      <div style="background:var(--cream);padding:12px 18px;border-radius:6px;font-size:0.82rem;flex:1;">
+        <strong>Seasonal Tip</strong><br><span style="color:var(--text-muted);">${pricing?.seasonalTip||''}</span>
+      </div>
+    </div>`;
+
+  // Rules & FAQ
+  const rGrid = document.getElementById('rulesGrid');
+  rGrid.innerHTML = `
+    <div class="rules-card">
+      <h3>🏠 House Rules</h3>
+      <div style="background:var(--cream);border-radius:6px;padding:10px 14px;margin-bottom:12px;font-size:0.83rem;">
+        <strong>Check-in:</strong> ${rules?.checkIn||'4:00 PM'} &nbsp;·&nbsp; <strong>Check-out:</strong> ${rules?.checkOut||'11:00 AM'}
+      </div>
+      ${(rules?.items||[]).map(r=>`<div class="rule-item"><div class="rule-icon">${r.icon}</div><div>${r.rule}</div></div>`).join('')}
+      <button class="copy-btn" style="margin-top:14px;width:100%;" onclick="copyRules()">Copy all rules</button>
+    </div>
+    <div class="rules-card">
+      <h3>❓ Guest FAQ</h3>
+      ${(rules?.faq||[]).map(f=>`<div class="faq-item"><div class="faq-q">${f.q}</div><div class="faq-a">${f.a}</div></div>`).join('')}
+      <button class="copy-btn" style="margin-top:14px;width:100%;" onclick="copyFAQ()">Copy all FAQ</button>
+    </div>`;
+
+  // SEO
+  const seoEl = document.getElementById('seoContent');
+  seoEl.innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin-bottom:28px;">
+      <div style="background:white;border:1px solid var(--border);border-radius:8px;padding:22px;">
+        <div class="section-label" style="margin-bottom:14px;">Primary Keywords</div>
+        <div class="ota-tags seo-tags">${(seo?.primaryKeywords||[]).map(k=>`<span class="ota-tag">${k}</span>`).join('')}</div>
+      </div>
+      <div style="background:white;border:1px solid var(--border);border-radius:8px;padding:22px;">
+        <div class="section-label" style="margin-bottom:14px;">Long-tail Keywords</div>
+        <div class="ota-tags seo-tags">${(seo?.longTailKeywords||[]).map(k=>`<span class="ota-tag">${k}</span>`).join('')}</div>
+      </div>
+      <div style="background:white;border:1px solid var(--border);border-radius:8px;padding:22px;">
+        <div class="section-label" style="margin-bottom:14px;">Local Keywords</div>
+        <div class="ota-tags seo-tags">${(seo?.localKeywords||[]).map(k=>`<span class="ota-tag">${k}</span>`).join('')}</div>
+      </div>
+    </div>
+    <div style="background:white;border:1px solid var(--border);border-radius:8px;padding:24px;margin-bottom:20px;">
+      <div class="section-label" style="margin-bottom:14px;">Meta Tags</div>
+      <div style="margin-bottom:14px;">
+        <div class="editable-label">Title Tag (${(seo?.titleTag||'').length}/60 chars)</div>
+        <textarea class="editable" style="width:100%;font-size:0.88rem;min-height:40px;">${seo?.titleTag||''}</textarea>
+      </div>
+      <div>
+        <div class="editable-label">Meta Description (${(seo?.metaDescription||'').length}/155 chars)</div>
+        <textarea class="editable" style="width:100%;font-size:0.83rem;min-height:60px;">${seo?.metaDescription||''}</textarea>
+      </div>
+      <button class="copy-btn" style="margin-top:12px;" onclick="copyMetaTags()">Copy meta tags</button>
+    </div>
+    <div style="background:white;border:1px solid var(--border);border-radius:8px;padding:24px;">
+      <div class="section-label" style="margin-bottom:14px;">SEO Tips</div>
+      ${(seo?.tips||[]).map((t,i)=>`<div style="display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);font-size:0.85rem;"><span style="color:var(--gold);font-weight:700;">${i+1}.</span><span>${t}</span></div>`).join('')}
+    </div>`;
+
+  document.getElementById('results').classList.add('active');
+}
+
+// ─── TABS ─────────────────────────────────────────────────────────────────────
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ─── COPY HELPERS ─────────────────────────────────────────────────────────────
+function copyFieldAbove(btn, stepsUp) {
+  let el = btn;
+  for (let i = 0; i < stepsUp; i++) el = el.previousElementSibling || el.parentElement.previousElementSibling;
+  // find textarea
+  const ta = el.querySelector ? el.querySelector('textarea') : el;
+  if (!ta) return;
+  navigator.clipboard.writeText(ta.value).then(() => flashCopied(btn));
+}
+function copyParentText(btn) {
+  const caption = btn.parentElement.querySelector('.social-caption');
+  if (caption) navigator.clipboard.writeText(caption.innerText).then(() => flashCopied(btn));
+}
+function flashCopied(btn) {
+  const orig = btn.textContent; btn.textContent = '✓ Copied!'; btn.classList.add('copied');
+  setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 2000);
+}
+function copyAllOTA() {
+  const texts = Array.from(document.querySelectorAll('.ota-fullbody-field')).map((ta, i) => {
+    const platform = document.querySelectorAll('.ota-name')[i]?.textContent || '';
+    return `=== ${platform.trim()} ===\n${ta.value}`;
+  }).join('\n\n');
+  navigator.clipboard.writeText(texts).then(() => alert('All OTA listings copied!'));
+}
+function copyRules() {
+  const rules = Array.from(document.querySelectorAll('.rule-item')).map(r => r.textContent.trim()).join('\n');
+  navigator.clipboard.writeText(rules).then(() => alert('Rules copied!'));
+}
+function copyFAQ() {
+  const faq = Array.from(document.querySelectorAll('.faq-item')).map(f => {
+    return `Q: ${f.querySelector('.faq-q').textContent}\nA: ${f.querySelector('.faq-a').textContent}`;
+  }).join('\n\n');
+  navigator.clipboard.writeText(faq).then(() => alert('FAQ copied!'));
+}
+function copyMetaTags() {
+  const tas = document.querySelectorAll('#seoContent textarea');
+  const text = `Title: ${tas[0]?.value||''}\nMeta: ${tas[1]?.value||''}`;
+  navigator.clipboard.writeText(text).then(() => alert('Meta tags copied!'));
+}
+
+// ─── PDF EXPORT ───────────────────────────────────────────────────────────────
+function exportPDF() {
+  window.print();
+}
+
+// ─── UTILS ────────────────────────────────────────────────────────────────────
+function showError(msg) {
+  document.getElementById('errorMsg').textContent = msg;
+  document.getElementById('errorBox').classList.add('active');
+}
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+document.getElementById('urlInput').addEventListener('keydown', e => { if (e.key === 'Enter') analyzeListing(); });
+
+// Print styles
+const printStyle = document.createElement('style');
+printStyle.textContent = `@media print { header{position:static;} .url-form,.photo-upload-area,.hint,.versions-bar,.tabs-nav,.prop-actions,.ota-actions,.copy-btn,.photo-copy-btn,.btn-pdf,.btn-new-version{display:none!important;} .tab-panel{display:block!important;} .results{display:block!important;} }`;
+document.head.appendChild(printStyle);
+
+// ─── AUDIT ────────────────────────────────────────────────────────────────────
+function useCurrentForAudit(e) {
+  e.preventDefault();
+  if (currentUrl) {
+    document.getElementById('auditUrlInput').value = currentUrl;
+    runAudit();
+  } else {
+    alert('Please analyze a listing first using the main form above.');
+  }
+}
+
+async function runAudit() {
+  const url = document.getElementById('auditUrlInput').value.trim();
+  if (!url) { alert('Please paste a listing URL to audit.'); return; }
+
+  const btn = document.getElementById('auditBtn');
+  btn.disabled = true; btn.textContent = 'Auditing…';
+  document.getElementById('auditLoading').style.display = 'block';
+  document.getElementById('auditResults').style.display = 'none';
+
+  const subs = ['Scanning listing content…','Checking headlines & copy…','Analyzing photo coverage…','Reviewing SEO & keywords…','Calculating health score…'];
+  let si = 0;
+  const subInterval = setInterval(() => {
+    document.getElementById('auditLoadingSub').textContent = subs[Math.min(si++, subs.length-1)];
+  }, 900);
+
+  try {
+    const prompt = `You are an expert vacation rental listing auditor. Analyze this property listing URL and provide a comprehensive audit.
+
+URL: ${url}
+
+Return ONLY valid JSON (no markdown, no backticks):
+{
+  "score": 74,
+  "grade": "B",
+  "verdict": "Good listing with clear opportunities",
+  "summary": "2-3 sentence overall assessment of the listing quality",
+  "categories": [
+    {
+      "name": "Headline & Title",
+      "icon": "✍️",
+      "score": 65,
+      "issues": [
+        { "type": "error", "text": "Headline is generic and doesn't highlight unique features", "fix": "Add a specific USP like 'Oceanfront' or 'Private Pool'" },
+        { "type": "warn", "text": "Title is 38 characters — could be longer for Airbnb (50 char limit)", "fix": "Expand to use full character allowance" },
+        { "type": "ok", "text": "No ALL CAPS or excessive punctuation", "fix": "" }
+      ]
+    },
+    {
+      "name": "Description Quality",
+      "icon": "📝",
+      "score": 70,
+      "issues": [
+        { "type": "error", "text": "First paragraph doesn't hook the reader — starts with address details", "fix": "Lead with the experience, not logistics" },
+        { "type": "warn", "text": "Amenities listed without emotional context", "fix": "Describe how guests will enjoy each amenity" },
+        { "type": "warn", "text": "No mention of nearby attractions or local experience", "fix": "Add 2-3 local highlights guests can walk to or drive to" },
+        { "type": "ok", "text": "Good length — over 300 words", "fix": "" }
+      ]
+    },
+    {
+      "name": "Photo Coverage",
+      "icon": "📸",
+      "score": 55,
+      "issues": [
+        { "type": "error", "text": "No photo of the bathroom — a top guest concern", "fix": "Add at least 2 clean bathroom photos" },
+        { "type": "error", "text": "Hero photo shows exterior but interior photos come after 8 slides", "fix": "Move best interior shot to position 2 or 3" },
+        { "type": "warn", "text": "Photo captions are missing on most photos", "fix": "Add descriptive captions to every photo" },
+        { "type": "ok", "text": "20+ photos uploaded — good quantity", "fix": "" }
+      ]
+    },
+    {
+      "name": "SEO & Discoverability",
+      "icon": "🔍",
+      "score": 60,
+      "issues": [
+        { "type": "error", "text": "Location keywords missing from title", "fix": "Include neighborhood or landmark in headline" },
+        { "type": "warn", "text": "High-value search terms like 'pet friendly' or 'workspace' not mentioned", "fix": "Add amenity keywords guests search for" },
+        { "type": "ok", "text": "Property type clearly identified", "fix": "" }
+      ]
+    },
+    {
+      "name": "Trust & Conversion",
+      "icon": "⭐",
+      "score": 80,
+      "issues": [
+        { "type": "warn", "text": "No mention of self check-in — a top search filter", "fix": "Explicitly mention smart lock / keypad access" },
+        { "type": "warn", "text": "Cancellation policy not referenced in description", "fix": "Add one line about flexible cancellation to reduce hesitation" },
+        { "type": "ok", "text": "Response time and acceptance rate badges visible", "fix": "" },
+        { "type": "ok", "text": "Clear house rules section present", "fix": "" }
+      ]
+    },
+    {
+      "name": "Pricing & Value",
+      "icon": "💰",
+      "score": 75,
+      "issues": [
+        { "type": "warn", "text": "Cleaning fee appears high relative to nightly rate", "fix": "Consider spreading cleaning cost into nightly rate for better conversion" },
+        { "type": "ok", "text": "Competitive nightly rate for the area", "fix": "" },
+        { "type": "ok", "text": "Weekly discount offered", "fix": "" }
+      ]
+    }
+  ],
+  "topFixes": [
+    {
+      "priority": "high",
+      "title": "Rewrite your headline to include a key differentiator",
+      "description": "Your current headline is generic. Listings with specific, benefit-driven headlines get up to 40% more clicks.",
+      "suggestion": "Try: 'Oceanfront Retreat w/ Private Pool — Sleeps 8 | Steps to Beach'"
+    },
+    {
+      "priority": "high",
+      "title": "Add bathroom photos immediately",
+      "description": "Bathroom photos are the #2 thing guests look for after the bedroom. Missing them creates distrust.",
+      "suggestion": "Upload 2 photos: one wide-angle of the full bathroom, one close-up of the shower/tub."
+    },
+    {
+      "priority": "high",
+      "title": "Rewrite your opening paragraph as a guest experience hook",
+      "description": "You have 3 seconds to hook a browser. Start with an emotional image, not logistics.",
+      "suggestion": "Try: 'Imagine waking up to ocean views, coffee in hand, with nothing on the agenda but relaxation...'"
+    },
+    {
+      "priority": "med",
+      "title": "Add location keywords to your title",
+      "description": "Airbnb and VRBO search algorithms heavily weight title keywords. Your neighborhood name should be in the headline.",
+      "suggestion": "Add 'Venice Beach,' 'Downtown Austin,' or whatever your location is to the title."
+    },
+    {
+      "priority": "med",
+      "title": "Mention self check-in explicitly",
+      "description": "Self check-in is one of the top search filters on Airbnb. If you have it, say it prominently.",
+      "suggestion": "Add: 'Easy self check-in via smart lock — code sent 24 hours before arrival.'"
+    },
+    {
+      "priority": "low",
+      "title": "Add captions to all photos",
+      "description": "Photo captions are indexed by search engines and help guests navigate your listing faster.",
+      "suggestion": "Keep captions short and descriptive: 'Sun-drenched master bedroom with king bed and en-suite bath.'"
+    }
+  ]
+}`;
+
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    if (!response.ok) throw new Error('API error');
+    const apiData = await response.json();
+    const text = apiData.content.map(b => b.text||'').join('');
+    let parsed;
+    try { parsed = JSON.parse(text.replace(/```json|```/g,'').trim()); }
+    catch { throw new Error('Could not parse audit response.'); }
+    renderAudit(parsed);
+  } catch(err) {
+    document.getElementById('auditResults').innerHTML = `<div class="error-box active"><h3>⚠️ Audit failed</h3><p>${err.message}</p></div>`;
+    document.getElementById('auditResults').style.display = 'block';
+  } finally {
+    clearInterval(subInterval);
+    document.getElementById('auditLoading').style.display = 'none';
+    btn.disabled = false; btn.textContent = 'Run Audit →';
+  }
+}
+
+function renderAudit(data) {
+  const scoreColor = data.score >= 80 ? '#5a8a62' : data.score >= 60 ? '#c9a84c' : '#b85c3a';
+  const gradeColor = data.score >= 80 ? '#5a8a62' : data.score >= 60 ? '#c9a84c' : '#b85c3a';
+  const circumference = 2 * Math.PI * 54;
+  const dash = (data.score / 100) * circumference;
+
+  const catScoreClass = s => s >= 75 ? 'cat-score-good' : s >= 55 ? 'cat-score-warn' : 'cat-score-bad';
+  const dotClass = t => t === 'error' ? 'dot-error' : t === 'warn' ? 'dot-warn' : 'dot-ok';
+  const priorityClass = p => p === 'high' ? 'priority-high' : p === 'med' ? 'priority-med' : 'priority-low';
+
+  const html = `
+    <div style="background:white;border:1px solid var(--border);border-radius:10px;padding:32px;margin-bottom:24px;">
+      <div class="score-ring-wrap">
+        <div class="score-ring">
+          <svg width="140" height="140" viewBox="0 0 140 140">
+            <circle cx="70" cy="70" r="54" fill="none" stroke="#f0ebe3" stroke-width="12"/>
+            <circle cx="70" cy="70" r="54" fill="none" stroke="${scoreColor}" stroke-width="12"
+              stroke-dasharray="${dash} ${circumference}" stroke-linecap="round"/>
+          </svg>
+          <div class="score-ring-text">
+            <div class="score-number" style="color:${scoreColor}">${data.score}</div>
+            <div class="score-label">Score</div>
+          </div>
+        </div>
+        <div class="score-meta">
+          <div class="score-grade" style="color:${gradeColor}">${data.grade}</div>
+          <div class="score-verdict">${data.verdict}</div>
+          <div class="score-summary">${data.summary}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label">Category breakdown</div>
+    <div class="audit-categories">
+      ${(data.categories||[]).map(cat => `
+        <div class="audit-cat">
+          <div class="audit-cat-header">
+            <div class="audit-cat-name">${cat.icon} ${cat.name}</div>
+            <div class="audit-cat-score ${catScoreClass(cat.score)}">${cat.score}/100</div>
+          </div>
+          ${(cat.issues||[]).map(issue => `
+            <div class="audit-issue">
+              <div class="issue-dot ${dotClass(issue.type)}"></div>
+              <div class="issue-text">
+                ${issue.text}
+                ${issue.fix ? `<div class="issue-fix">→ ${issue.fix}</div>` : ''}
+              </div>
+            </div>`).join('')}
+        </div>`).join('')}
+    </div>
+
+    <div class="section-label">Priority fixes</div>
+    <div class="audit-fixes">
+      <h3>🔧 Top ${(data.topFixes||[]).length} Things to Fix Right Now</h3>
+      ${(data.topFixes||[]).map(fix => `
+        <div class="fix-item">
+          <div class="fix-priority ${priorityClass(fix.priority)}">${fix.priority.toUpperCase()}</div>
+          <div class="fix-content">
+            <div class="fix-title">${fix.title}</div>
+            <div class="fix-desc">${fix.description}</div>
+            ${fix.suggestion ? `<div class="fix-suggestion">"${fix.suggestion}"</div>` : ''}
+          </div>
+        </div>`).join('')}
+    </div>
+
+    <button class="copy-btn" onclick="copyAuditReport()" style="width:100%;padding:12px;">📋 Copy Full Audit Report</button>
+  `;
+
+  const el = document.getElementById('auditResults');
+  el.innerHTML = html;
+  el.style.display = 'block';
+  el._auditData = data;
+}
+
+function copyAuditReport() {
+  const el = document.getElementById('auditResults');
+  const data = el._auditData;
+  if (!data) return;
+  let text = `VR365 LISTING AUDIT REPORT\n${'='.repeat(40)}\n`;
+  text += `Score: ${data.score}/100 (${data.grade}) — ${data.verdict}\n${data.summary}\n\n`;
+  (data.categories||[]).forEach(c => {
+    text += `${c.name}: ${c.score}/100\n`;
+    (c.issues||[]).forEach(i => { text += `  ${i.type==='error'?'✗':i.type==='warn'?'⚠':'✓'} ${i.text}${i.fix?' → '+i.fix:''}\n`; });
+    text += '\n';
+  });
+  text += `TOP FIXES:\n`;
+  (data.topFixes||[]).forEach((f,i) => { text += `${i+1}. [${f.priority.toUpperCase()}] ${f.title}\n   ${f.description}\n`; if(f.suggestion) text += `   Suggested: "${f.suggestion}"\n`; text += '\n'; });
+  navigator.clipboard.writeText(text).then(() => alert('Audit report copied!'));
+}
+
+
+// ─── CHAR COUNTER & COPY HELPERS ─────────────────────────────────────────────
+function updateCharCounter(textarea, counterId, limit) {
+  const len = textarea.value.length;
+  const el = document.getElementById(counterId);
+  if (!el) return;
+  const over = len > limit;
+  const near = len >= limit * 0.9;
+  el.textContent = len + '/' + limit;
+  el.style.color = over ? '#c62828' : near ? '#f57f17' : '#5a8a62';
+  el.style.background = over ? '#fce4ec' : near ? '#fff8e1' : '#e8f5e9';
+  textarea.style.borderColor = over ? '#f44336' : 'transparent';
+}
+
+function copyById(btn, id) {
+  const ta = document.getElementById(id);
+  if (ta) navigator.clipboard.writeText(ta.value).then(() => flashCopied(btn));
+}
+
+
+function smoothScroll(e, id) {
+  e.preventDefault();
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+</script>
+
+
+<script>
+function smoothScroll(e, id) {
+  if (e) e.preventDefault();
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Scroll reveal
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+// Nav background on scroll
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('mainNav');
+  if (window.scrollY > 80) {
+    nav.style.background = 'rgba(0,0,0,0.92)';
+  } else {
+    nav.style.background = 'rgba(0,0,0,0.72)';
+  }
+});
+
+// Print styles
+const ps = document.createElement('style');
+ps.textContent = '@media print { nav,footer,.hero-section,.showcase-section,.ba-section,.features-section,.pricing-section,.tool-reveal-section{display:none!important;} .url-form,.photo-upload-area,.hint,.versions-bar,.tabs-nav,.prop-actions,.ota-actions,.copy-btn,.btn-pdf,.btn-new-version{display:none!important;} .tab-panel{display:block!important;} .results{display:block!important;} }';
+document.head.appendChild(ps);
+
+function toggleMorePlatforms(btn) {
+  const grid = document.getElementById('morePlatformsGrid');
+  const isOpen = grid.style.display !== 'none';
+  grid.style.display = isOpen ? 'none' : 'grid';
+  btn.classList.toggle('open', !isOpen);
+}
+
+</script>
+</body>
+</html>
