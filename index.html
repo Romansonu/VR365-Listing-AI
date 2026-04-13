@@ -1272,6 +1272,8 @@ async function analyzeListing() {
   document.getElementById('analyzeBtn').disabled = true;
   document.getElementById('analyzeBtn').textContent = 'Analyzing…';
 
+  refreshWantFlags();
+  updateStepsForSelection();
   setStep(0);
   try {
     const data = await fetchAllData(url);
@@ -1327,28 +1329,44 @@ const STEP_LABELS = ['Fetching listing details…','Analyzing photos…','Resear
 function setStep(i) {
   STEPS.forEach((s, idx) => {
     const el = document.getElementById(s);
+    if (!el) return;
     el.className = 'step-pill' + (idx < i ? ' done' : idx === i ? ' active' : '');
   });
   document.getElementById('loadingSub').textContent = STEP_LABELS[i] || 'Finishing up…';
 }
 
+function updateStepsForSelection() {
+  const stepMap = [
+    { id: 's1', label: '🔍 Fetching listing', always: true },
+    { id: 's2', label: '📸 Analyzing photos', feature: 'photos' },
+    { id: 's3', label: '💰 Pricing research', feature: 'pricing' },
+    { id: 's4', label: '✍️ Writing copy', feature: 'ota' },
+    { id: 's5', label: '📱 Social captions', feature: 'social' },
+    { id: 's6', label: '📋 Rules & FAQ', feature: 'rules' },
+  ];
+  stepMap.forEach(s => {
+    const el = document.getElementById(s.id);
+    if (!el) return;
+    if (s.always || selectedFeatures.has(s.feature)) {
+      el.style.display = '';
+      el.textContent = s.label;
+    } else {
+      el.style.display = 'none';
+    }
+  });
+}
+
 // ─── API CALL ─────────────────────────────────────────────────────────────────
 async function fetchAllData(url) {
   setStep(0); await sleep(500);
-  setStep(1); await sleep(500);
-  setStep(2); await sleep(400);
-  setStep(3);
+  if (wantPhotos) { setStep(1); await sleep(400); }
+  if (wantPricing) { setStep(2); await sleep(400); }
+  if (wantOTA) { setStep(3); await sleep(300); }
 
   const hasPhotos = uploadedPhotos.length > 0;
   const photoNote = hasPhotos ? `The user has uploaded ${uploadedPhotos.length} real property photos. Describe them as actual rooms based on typical vacation rental photography.` : '';
 
-  const wantOTA = selectedFeatures.has('ota');
-  const wantPhotos = selectedFeatures.has('photos');
-  const wantSocial = selectedFeatures.has('social');
-  const wantPricing = selectedFeatures.has('pricing');
-  const wantRules = selectedFeatures.has('rules');
-  const wantSEO = selectedFeatures.has('seo');
-  const wantMarket = selectedFeatures.has('market');
+
 
   // Build dynamic prompt based on selected features
   const sectionsNeeded = [];
@@ -2326,6 +2344,20 @@ function toggleMorePlatforms(btn) {
 
 // ─── FEATURE SELECTOR ────────────────────────────────────────────────────────
 let selectedFeatures = new Set();
+let wantOTA = false, wantPhotos = false, wantSocial = false;
+let wantPricing = false, wantRules = false, wantSEO = false;
+let wantMarket = false, wantAudit = false;
+
+function refreshWantFlags() {
+  wantOTA = selectedFeatures.has('ota');
+  wantPhotos = selectedFeatures.has('photos');
+  wantSocial = selectedFeatures.has('social');
+  wantPricing = selectedFeatures.has('pricing');
+  wantRules = selectedFeatures.has('rules');
+  wantSEO = selectedFeatures.has('seo');
+  wantMarket = selectedFeatures.has('market');
+  wantAudit = selectedFeatures.has('audit');
+}
 
 function toggleFeature(el, feature) {
   if (selectedFeatures.has(feature)) {
