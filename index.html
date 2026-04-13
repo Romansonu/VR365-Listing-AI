@@ -1052,9 +1052,15 @@ footer {
       <div class="fs-label">What do you want to generate?</div>
       <div class="fs-grid">
         <div class="fs-item" onclick="toggleFeature(this, 'ota')" data-feature="ota">
-          <div class="fs-icon">🏠</div>
-          <div class="fs-name">OTA Listings</div>
-          <div class="fs-desc">Headlines + full descriptions for all 18 platforms</div>
+          <div class="fs-icon">📰</div>
+          <div class="fs-name">OTA Headlines</div>
+          <div class="fs-desc">Up to 10 headline options per platform</div>
+          <div class="fs-check">✓</div>
+        </div>
+        <div class="fs-item" onclick="toggleFeature(this, 'otadesc')" data-feature="otadesc">
+          <div class="fs-icon">📝</div>
+          <div class="fs-name">OTA Descriptions</div>
+          <div class="fs-desc">Full listing body copy per platform</div>
           <div class="fs-check">✓</div>
         </div>
         <div class="fs-item" onclick="toggleFeature(this, 'photos')" data-feature="photos">
@@ -1063,12 +1069,7 @@ footer {
           <div class="fs-desc">Room-by-room captions for every photo</div>
           <div class="fs-check">✓</div>
         </div>
-        <div class="fs-item" onclick="toggleFeature(this, 'social')" data-feature="social">
-          <div class="fs-icon">📱</div>
-          <div class="fs-name">Social Media</div>
-          <div class="fs-desc">Instagram, Facebook, TikTok & Twitter captions</div>
-          <div class="fs-check">✓</div>
-        </div>
+
         <div class="fs-item" onclick="toggleFeature(this, 'pricing')" data-feature="pricing">
           <div class="fs-icon">💰</div>
           <div class="fs-name">Pricing Intelligence</div>
@@ -1196,8 +1197,8 @@ footer {
 
     <!-- TABS -->
     <div class="tabs-nav fade-in d1">
-      <button class="tab-btn active" onclick="switchTab('ota', this)">🏠 OTA Listings</button>
-      <button class="tab-btn" onclick="switchTab('social', this)">📱 Social Media</button>
+      <button class="tab-btn active" onclick="switchTab('ota', this)">📰 OTA Headlines</button>
+      <button class="tab-btn" onclick="switchTab('otadesc', this)">📝 OTA Descriptions</button>
       <button class="tab-btn" onclick="switchTab('photos', this)">📸 Photo Descriptions</button>
       <button class="tab-btn" onclick="switchTab('pricing', this)">💰 Pricing</button>
       <button class="tab-btn" onclick="switchTab('rules', this)">📋 Rules & FAQ</button>
@@ -1212,10 +1213,10 @@ footer {
       <div class="ota-grid" id="otaGrid"></div>
     </div>
 
-    <!-- SOCIAL TAB -->
-    <div class="tab-panel" id="tab-social">
-      <div class="section-label">Social media captions</div>
-      <div class="social-grid" id="socialGrid"></div>
+    <!-- OTA DESCRIPTIONS TAB -->
+    <div class="tab-panel" id="tab-otadesc">
+      <div class="section-label">Full listing descriptions per platform</div>
+      <div class="ota-desc-grid" id="otaDescGrid"></div>
     </div>
 
     <!-- PHOTOS TAB -->
@@ -1575,7 +1576,7 @@ Return ONLY valid JSON with these sections:
     const otaJsonTemplate = otaList.map(p => {
       const icons = {'Airbnb':'🏠','VRBO':'🌴','Booking.com':'🔵','TripAdvisor':'🦉','Google Vacation Rentals':'🔍','Hipcamp':'🏕️','Expedia':'🏨','Hotels.com':'🏩','Agoda':'🌐','Kayak':'🔎','Homes & Villas by Marriott':'🏅','Plum Guide':'✨','Houfy':'🏡','Vacasa':'🏘️','Evolve':'🔑','Furnished Finder':'🛋️','Glamping Hub':'⛺',"Misterb&b":'🌈'};
       const classes = {'Airbnb':'airbnb','VRBO':'vrbo','Booking.com':'booking','TripAdvisor':'tripadvisor','Google Vacation Rentals':'google','Hipcamp':'hipcamp','Expedia':'expedia','Hotels.com':'hotelscom','Agoda':'agoda','Kayak':'kayak','Homes & Villas by Marriott':'marriott','Plum Guide':'plumguide','Houfy':'houfy','Vacasa':'vacasa','Evolve':'evolve','Furnished Finder':'furnishedfinder','Glamping Hub':'glampinghub',"Misterb&b":'misterbnb'};
-      return `{"platform":"${p}","icon":"${icons[p]||'🏠'}","colorClass":"${classes[p]||'default'}","charLimit":${charLimits[p]||75},"headline":"WRITE HEADLINE UNDER ${charLimits[p]||75} CHARS","headlineCharCount":0,"shortDesc":"2 sentence hook","fullBody":"Full 4-5 sentence description","tags":["tag1","tag2","tag3"]}`;
+      return `{"platform":"${p}","icon":"${icons[p]||'🏠'}","colorClass":"${classes[p]||'default'}","charLimit":${charLimits[p]||75},"headlines":["headline 1 under limit","headline 2 under limit","headline 3 under limit","headline 4 under limit","headline 5 under limit","headline 6","headline 7","headline 8","headline 9","headline 10"],"shortDesc":"2 sentence hook","fullBody":"Full 4-5 sentence description with all amenities and nearby attractions","tags":["tag1","tag2","tag3"]}`;
     }).join(',\n  ');
 
     const otaPrompt = `You are an expert vacation rental copywriter. Write optimized listings for ONLY these ${otaList.length} platforms: ${otaList.join(', ')}.
@@ -1593,8 +1594,45 @@ Use nearby attractions in headlines. Match each platform tone. Return ONLY valid
   ${otaJsonTemplate}
 ]}`;
 
-    const otaResp = await callAPI(otaPrompt);
-    result.otas = otaResp.otas || [];
+    let allOtas = [];
+    if (otaList.length <= 6) {
+      // Small batch — single call
+      const otaResp = await callAPI(otaPrompt);
+      allOtas = otaResp.otas || [];
+    } else {
+      // Large batch — split into two calls
+      const batch1 = otaList.slice(0, Math.ceil(otaList.length / 2));
+      const batch2 = otaList.slice(Math.ceil(otaList.length / 2));
+
+      const makeBatchPrompt = (batch) => {
+        const batchLimits = batch.map(p => `- ${p}: MAX ${charLimits[p]||75} chars`).join('\n');
+        const batchTemplate = batch.map(p => {
+          const icons = {'Airbnb':'🏠','VRBO':'🌴','Booking.com':'🔵','TripAdvisor':'🦉','Google Vacation Rentals':'🔍','Hipcamp':'🏕️','Expedia':'🏨','Hotels.com':'🏩','Agoda':'🌐','Kayak':'🔎','Homes & Villas by Marriott':'🏅','Plum Guide':'✨','Houfy':'🏡','Vacasa':'🏘️','Evolve':'🔑','Furnished Finder':'🛋️','Glamping Hub':'⛺',"Misterb&b":'🌈'};
+          const classes = {'Airbnb':'airbnb','VRBO':'vrbo','Booking.com':'booking','TripAdvisor':'tripadvisor','Google Vacation Rentals':'google','Hipcamp':'hipcamp','Expedia':'expedia','Hotels.com':'hotelscom','Agoda':'agoda','Kayak':'kayak','Homes & Villas by Marriott':'marriott','Plum Guide':'plumguide','Houfy':'houfy','Vacasa':'vacasa','Evolve':'evolve','Furnished Finder':'furnishedfinder','Glamping Hub':'glampinghub',"Misterb&b":'misterbnb'};
+          return `{"platform":"${p}","icon":"${icons[p]||'🏠'}","colorClass":"${classes[p]||'default'}","charLimit":${charLimits[p]||75},"headlines":["headline 1 under limit","headline 2 under limit","headline 3 under limit","headline 4 under limit","headline 5 under limit","headline 6","headline 7","headline 8","headline 9","headline 10"],"shortDesc":"2 sentence hook","fullBody":"Full 4-5 sentence description with all amenities and nearby attractions","tags":["tag1","tag2","tag3"]}`;
+        }).join(',\n  ');
+        return `You are an expert vacation rental copywriter. Write optimized listings for ONLY these ${batch.length} platforms: ${batch.join(', ')}.
+
+Property: ${result.property?.title || 'Vacation Rental'}
+Location: ${location}
+Type: ${propType}, ${beds} bedrooms, ${guests} guests
+Nearby: ${nearby}
+
+STRICT CHARACTER LIMITS:
+${batchLimits}
+
+IMPORTANT: For each platform generate exactly 10 DIFFERENT headline variations, all within the character limit. Each must be unique angle/hook.\nReturn ONLY valid JSON: {"otas": [
+  ${batchTemplate}
+]}`;
+      };
+
+      const [resp1, resp2] = await Promise.all([
+        callAPI(makeBatchPrompt(batch1)),
+        callAPI(makeBatchPrompt(batch2))
+      ]);
+      allOtas = [...(resp1.otas || []), ...(resp2.otas || [])];
+    }
+    result.otas = allOtas;
   }
 
   return result;
@@ -1606,7 +1644,7 @@ async function callAPI(prompt) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       model: 'claude-sonnet-4-20250514',
-      max_tokens: 4000,
+      max_tokens: 8000,
       messages: [{ role: 'user', content: prompt }]
     })
   });
@@ -1785,7 +1823,7 @@ function renderResults(data) {
   if (wantMarket && data.market) renderMarket(data.market, property);
 
   // Show/hide tabs based on selected features
-  const tabMap = { ota:'tab-ota', photos:'tab-photos', social:'tab-social', pricing:'tab-pricing', rules:'tab-rules', seo:'tab-seo', market:'tab-market', audit:'tab-audit' };
+  const tabMap = { ota:'tab-ota', otadesc:'tab-otadesc', photos:'tab-photos', pricing:'tab-pricing', rules:'tab-rules', seo:'tab-seo', market:'tab-market', audit:'tab-audit' };
   document.querySelectorAll('.tab-btn').forEach(btn => {
     const tabId = btn.getAttribute('onclick').match(/'([^']+)'/)?.[1];
     if (tabId && tabId !== 'audit') {
@@ -2023,7 +2061,7 @@ Return ONLY valid JSON (no markdown, no backticks):
         },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 4000,
+        max_tokens: 8000,
         messages: [{ role: 'user', content: prompt }]
       })
     });
@@ -2208,7 +2246,8 @@ function toggleMorePlatforms(btn) {
 let selectedFeatures = new Set();
 let wantOTA = false, wantPhotos = false, wantSocial = false;
 let wantPricing = false, wantRules = false, wantSEO = false;
-let wantMarket = false, wantAudit = false;
+let wantMarket = false, wantAudit = false, wantOTADesc = false;
+let otaList = [];
 
 function refreshWantFlags() {
   wantOTA = selectedFeatures.has('ota');
@@ -2219,6 +2258,8 @@ function refreshWantFlags() {
   wantSEO = selectedFeatures.has('seo');
   wantMarket = selectedFeatures.has('market');
   wantAudit = selectedFeatures.has('audit');
+  wantOTADesc = selectedFeatures.has('otadesc');
+  otaList = [...selectedOTAs];
 }
 
 function toggleFeature(el, feature) {
@@ -2246,7 +2287,7 @@ function selectNoneFeatures() {
 
 function updateFsCount() {
   const el = document.getElementById('fsCount');
-  if (el) el.textContent = selectedFeatures.size + ' of 8 selected' + (selectedFeatures.size === 0 ? ' — pick what you need' : '');
+  if (el) el.textContent = selectedFeatures.size + ' of 7 selected' + (selectedFeatures.size === 0 ? ' — pick what you need' : '');
   const btn = document.getElementById('analyzeBtn');
   if (btn) {
     if (selectedFeatures.size === 0) {
@@ -2254,7 +2295,7 @@ function updateFsCount() {
       btn.style.background = '#bbb';
       btn.style.cursor = 'not-allowed';
     } else {
-      const labels = { ota:'OTA Listings', photos:'Photos', social:'Social', pricing:'Pricing', rules:'Rules', seo:'SEO', market:'Market Intel', audit:'Auditor' };
+      const labels = { ota:'OTA Headlines', otadesc:'OTA Descriptions', photos:'Photos', pricing:'Pricing', rules:'Rules', seo:'SEO', market:'Market Intel', audit:'Auditor' };
       const selected = [...selectedFeatures].map(f => labels[f]).join(' · ');
       btn.textContent = 'Generate: ' + selected + ' →';
       btn.style.background = '';
@@ -2446,6 +2487,15 @@ function toggleFeature(el, feature) {
   // Show OTA selector if OTA is selected
   const otaSel = document.getElementById('otaSelector');
   if (otaSel) otaSel.style.display = selectedFeatures.has('ota') ? 'block' : 'none';
+}
+
+
+function copyAllHeadlines(btn, otaIdx) {
+  const cards = document.querySelectorAll('#otaGrid .ota-card');
+  const card = cards[otaIdx];
+  if (!card) return;
+  const texts = Array.from(card.querySelectorAll('textarea')).map((t,i) => `${i+1}. ${t.value}`).join('\n');
+  navigator.clipboard.writeText(texts).then(() => flashCopied(btn));
 }
 
 </script>
