@@ -1391,7 +1391,7 @@ function renderVersionChips() {
 
 // ─── STEPS ────────────────────────────────────────────────────────────────────
 const STEPS = ['s1','s2','s3','s4','s5','s6'];
-const STEP_LABELS = ['Fetching listing details…','Analyzing photos…','Researching pricing…','Writing OTA copy…','Crafting social captions…','Generating rules & FAQ…'];
+const STEP_LABELS = ['Fetching listing details…','Analyzing photos…','Researching pricing…','Writing OTA copy…','Finalizing content…','Generating rules & FAQ…'];
 function setStep(i) {
   STEPS.forEach((s, idx) => {
     const el = document.getElementById(s);
@@ -1429,7 +1429,7 @@ async function fetchAllData(url) {
   const sectionsNeeded = [];
   if (wantOTA) sectionsNeeded.push('otas');
   if (wantPhotos) sectionsNeeded.push('photos');
-  if (wantSocial) sectionsNeeded.push('social');
+  
   if (wantPricing) sectionsNeeded.push('pricing');
   if (wantRules) sectionsNeeded.push('rules');
   if (wantSEO) sectionsNeeded.push('seo');
@@ -1473,12 +1473,7 @@ Return ONLY valid JSON with these sections:
     {"room":"Outdoor / Patio","emoji":"🌿","description":"Description"},
     {"room":"View / Surroundings","emoji":"🌅","description":"Description"}
   ]` : ''}
-  ${wantSocial ? `,"social": [
-    {"platform":"Instagram","icon":"📸","caption":"Evocative caption with 10 hashtags"},
-    {"platform":"Facebook","icon":"👥","caption":"Community tone, ends with question"},
-    {"platform":"TikTok","icon":"🎵","caption":"Punchy 1-2 sentences with 5 hashtags"},
-    {"platform":"Twitter / X","icon":"🐦","caption":"Under 240 chars, witty, 2-3 hashtags"}
-  ]` : ''}
+  
   ${wantPricing ? `,"pricing": {
     "platforms": [
       {"name":"Airbnb","low":185,"high":265,"avg":220,"occupancy":"72%"},
@@ -1663,7 +1658,7 @@ async function callAPI(prompt) {
 
 // ─── RENDER ───────────────────────────────────────────────────────────────────
 function renderResults(data) {
-  const { property, otas, social, photos, pricing, rules, seo } = data;
+  const { property, otas, photos, pricing, rules, seo } = data;
 
   // Header
   document.getElementById('propTitle').textContent = property.title;
@@ -2257,7 +2252,7 @@ function toggleFeature(el, feature) {
 }
 
 function selectAllFeatures() {
-  selectedFeatures = new Set(['ota','photos','social','pricing','rules','seo']);
+  selectedFeatures = new Set(['ota','otadesc','photos','pricing','rules','seo','market','audit']);
   document.querySelectorAll('.fs-item').forEach(el => el.classList.add('active'));
   updateFsCount();
 }
