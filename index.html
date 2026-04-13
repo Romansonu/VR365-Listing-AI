@@ -367,6 +367,68 @@ footer {
 @media(max-width:900px) { .more-platforms-grid { grid-template-columns: repeat(2,1fr); } }
 @media(max-width:500px) { .more-platforms-grid { grid-template-columns: 1fr; } }
 
+
+/* FEATURE SELECTOR */
+.feature-selector {
+  max-width: 660px; margin: 0 auto 20px;
+  background: white; border: 1px solid var(--border-light);
+  border-radius: 12px; overflow: hidden;
+}
+.fs-label {
+  padding: 14px 20px 10px;
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--mid-gray);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+.fs-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 1px; background: rgba(0,0,0,0.06);
+}
+.fs-item {
+  background: white; padding: 16px 14px;
+  cursor: pointer; transition: all 0.2s;
+  position: relative; user-select: none;
+}
+.fs-item:hover { background: #fafafa; }
+.fs-item.active { background: #fffdf5; }
+.fs-icon { font-size: 1.4rem; margin-bottom: 6px; }
+.fs-name { font-size: 0.82rem; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
+.fs-desc { font-size: 0.7rem; color: var(--mid-gray); line-height: 1.4; }
+.fs-check {
+  position: absolute; top: 10px; right: 10px;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--light-gray); color: transparent;
+  font-size: 0.65rem; display: flex; align-items: center; justify-content: center;
+  font-weight: 700; transition: all 0.2s;
+}
+.fs-item.active .fs-check {
+  background: var(--gold); color: white;
+}
+.fs-item:not(.active) .fs-name { color: var(--mid-gray); }
+.fs-item:not(.active) .fs-icon { opacity: 0.35; }
+.fs-footer {
+  padding: 12px 20px; border-top: 1px solid rgba(0,0,0,0.06);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.fs-selected-count { font-size: 0.78rem; color: var(--mid-gray); font-weight: 500; }
+.fs-shortcuts { display: flex; gap: 8px; }
+.fs-shortcuts button {
+  padding: 4px 12px; border-radius: 20px; border: 1px solid var(--light-gray);
+  background: transparent; font-family: inherit; font-size: 0.72rem;
+  font-weight: 600; color: var(--mid-gray); cursor: pointer; transition: all 0.2s;
+}
+.fs-shortcuts button:hover { border-color: var(--gold); color: var(--gold); }
+.analyze-main-btn {
+  display: block; width: 100%; max-width: 660px; margin: 0 auto;
+  padding: 16px; background: var(--ink); color: white; border: none;
+  border-radius: 8px; font-family: inherit; font-size: 1rem; font-weight: 700;
+  cursor: pointer; transition: all 0.25s; letter-spacing: -0.2px;
+}
+.analyze-main-btn:hover { background: var(--rust); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+.analyze-main-btn:disabled { background: #bbb; cursor: not-allowed; transform: none; box-shadow: none; }
+@media(max-width: 900px) { .fs-grid { grid-template-columns: repeat(4,1fr); } }
+@media(max-width: 600px) { .fs-grid { grid-template-columns: repeat(2,1fr); } }
+
 /* ── SCROLL REVEAL ── */
 .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
@@ -944,15 +1006,79 @@ footer {
     <p class="section-sub" style="text-align:center;margin-bottom:40px;margin-left:auto;margin-right:auto;">Your full listing package — all platforms, all limits respected, nearby locations included — in under 60 seconds.</p>
     <div class="url-form">
       <input type="text" id="urlInput" placeholder="Paste any property URL to get started…" />
-      <button id="analyzeBtn" onclick="analyzeListing()">Analyze →</button>
     </div>
+
     <div class="photo-upload-area" id="uploadArea" onclick="document.getElementById('photoFileInput').click()" ondragover="handleDragOver(event)" ondrop="handleDrop(event)" ondragleave="this.classList.remove('drag-over')">
       <p><strong>📸 Upload property photos</strong> — drag & drop or click to browse</p>
       <p style="margin-top:4px;">AI will describe each photo specifically</p>
       <div class="photo-thumbnails" id="photoThumbnails"></div>
       <input type="file" id="photoFileInput" multiple accept="image/*" onchange="handlePhotoFiles(this.files)" />
     </div>
-    <div class="hint">Works with <span>Airbnb</span> <span>VRBO</span> <span>Zillow</span> <span>Realtor.com</span> <span>Any URL</span></div>
+
+    <!-- FEATURE SELECTOR -->
+    <div class="feature-selector">
+      <div class="fs-label">What do you want to generate?</div>
+      <div class="fs-grid">
+        <div class="fs-item" onclick="toggleFeature(this, 'ota')" data-feature="ota">
+          <div class="fs-icon">🏠</div>
+          <div class="fs-name">OTA Listings</div>
+          <div class="fs-desc">Headlines + full descriptions for all 18 platforms</div>
+          <div class="fs-check">✓</div>
+        </div>
+        <div class="fs-item" onclick="toggleFeature(this, 'photos')" data-feature="photos">
+          <div class="fs-icon">📸</div>
+          <div class="fs-name">Photo Descriptions</div>
+          <div class="fs-desc">Room-by-room captions for every photo</div>
+          <div class="fs-check">✓</div>
+        </div>
+        <div class="fs-item" onclick="toggleFeature(this, 'social')" data-feature="social">
+          <div class="fs-icon">📱</div>
+          <div class="fs-name">Social Media</div>
+          <div class="fs-desc">Instagram, Facebook, TikTok & Twitter captions</div>
+          <div class="fs-check">✓</div>
+        </div>
+        <div class="fs-item" onclick="toggleFeature(this, 'pricing')" data-feature="pricing">
+          <div class="fs-icon">💰</div>
+          <div class="fs-name">Pricing Intelligence</div>
+          <div class="fs-desc">Nightly rate suggestions per platform</div>
+          <div class="fs-check">✓</div>
+        </div>
+        <div class="fs-item" onclick="toggleFeature(this, 'rules')" data-feature="rules">
+          <div class="fs-icon">📋</div>
+          <div class="fs-name">House Rules & FAQ</div>
+          <div class="fs-desc">Auto-generated rules & guest FAQ</div>
+          <div class="fs-check">✓</div>
+        </div>
+        <div class="fs-item" onclick="toggleFeature(this, 'seo')" data-feature="seo">
+          <div class="fs-icon">🔍</div>
+          <div class="fs-name">SEO & Keywords</div>
+          <div class="fs-desc">Keywords, meta tags & search strategy</div>
+          <div class="fs-check">✓</div>
+        </div>
+        <div class="fs-item" onclick="toggleFeature(this, 'market')" data-feature="market">
+          <div class="fs-icon">📊</div>
+          <div class="fs-name">Market Pricing Intel</div>
+          <div class="fs-desc">Competitor rates, seasonal & occasion pricing</div>
+          <div class="fs-check">✓</div>
+        </div>
+        <div class="fs-item" onclick="toggleFeature(this, 'audit')" data-feature="audit">
+          <div class="fs-icon">🩺</div>
+          <div class="fs-name">Listing Auditor</div>
+          <div class="fs-desc">Health score, mistake finder & fix suggestions</div>
+          <div class="fs-check">✓</div>
+        </div>
+      </div>
+      <div class="fs-footer">
+        <div class="fs-selected-count" id="fsCount">0 of 6 selected — pick what you need</div>
+        <div class="fs-shortcuts">
+          <button onclick="selectAllFeatures()">Select All</button>
+          <button onclick="selectNoneFeatures()">Clear</button>
+        </div>
+      </div>
+    </div>
+
+    <button id="analyzeBtn" class="analyze-main-btn" onclick="analyzeListing()">Select features above to generate →</button>
+    <div class="hint" style="margin-top:12px;">Works with <span>Airbnb</span> <span>VRBO</span> <span>Zillow</span> <span>Realtor.com</span> <span>Any URL</span></div>
   </div>
 </section>
 
@@ -1011,6 +1137,7 @@ footer {
       <button class="tab-btn" onclick="switchTab('pricing', this)">💰 Pricing</button>
       <button class="tab-btn" onclick="switchTab('rules', this)">📋 Rules & FAQ</button>
       <button class="tab-btn" onclick="switchTab('seo', this)">🔍 SEO</button>
+      <button class="tab-btn" onclick="switchTab('market', this)">📊 Market Intel</button>
       <button class="tab-btn" onclick="switchTab('audit', this)">🩺 Listing Audit</button>
     </div>
 
@@ -1051,6 +1178,12 @@ footer {
       <div id="seoContent"></div>
     </div>
 
+
+    <!-- MARKET INTEL TAB -->
+    <div class="tab-panel" id="tab-market">
+      <div class="section-label">Market pricing intelligence & competitor analysis</div>
+      <div id="marketContent"></div>
+    </div>
 
     <!-- AUDIT TAB -->
     <div class="tab-panel" id="tab-audit">
@@ -1130,6 +1263,7 @@ function handlePhotoFiles(files) {
 async function analyzeListing() {
   const url = document.getElementById('urlInput').value.trim();
   if (!url && uploadedPhotos.length === 0) { alert('Please paste a URL or upload photos.'); return; }
+  if (selectedFeatures.size === 0) { alert('Please select at least one feature to generate.'); return; }
   currentUrl = url || 'property from uploaded photos';
 
   document.getElementById('loading').classList.add('active');
@@ -1208,7 +1342,27 @@ async function fetchAllData(url) {
   const hasPhotos = uploadedPhotos.length > 0;
   const photoNote = hasPhotos ? `The user has uploaded ${uploadedPhotos.length} real property photos. Describe them as actual rooms based on typical vacation rental photography.` : '';
 
+  const wantOTA = selectedFeatures.has('ota');
+  const wantPhotos = selectedFeatures.has('photos');
+  const wantSocial = selectedFeatures.has('social');
+  const wantPricing = selectedFeatures.has('pricing');
+  const wantRules = selectedFeatures.has('rules');
+  const wantSEO = selectedFeatures.has('seo');
+  const wantMarket = selectedFeatures.has('market');
+
+  // Build dynamic prompt based on selected features
+  const sectionsNeeded = [];
+  if (wantOTA) sectionsNeeded.push('otas array (all 18 platforms with headlines and descriptions)');
+  if (wantPhotos) sectionsNeeded.push('photos array (room-by-room descriptions)');
+  if (wantSocial) sectionsNeeded.push('social array (Instagram, Facebook, TikTok, Twitter)');
+  if (wantPricing) sectionsNeeded.push('pricing object (nightly rates per platform)');
+  if (wantRules) sectionsNeeded.push('rules object (house rules and FAQ)');
+  if (wantSEO) sectionsNeeded.push('seo object (keywords and meta tags)');
+  if (wantMarket) sectionsNeeded.push('market object (competitor pricing, seasonal rates, occasion pricing, weekly/monthly suggestions)');
+
   const prompt = `You are an expert vacation rental and real estate copywriter with deep knowledge of every major OTA platform's exact character limits and search algorithms.
+ONLY generate the sections requested. Omit any sections not listed below.
+REQUESTED SECTIONS: ${sectionsNeeded.join(', ')}
 
 URL: ${url || 'vacation rental property'}
 ${photoNote}
@@ -1516,6 +1670,43 @@ Return ONLY valid JSON (no markdown, no backticks):
     "titleTag": "SEO-optimized title tag under 60 chars",
     "metaDescription": "Meta description under 155 chars with primary keywords",
     "tips": ["SEO tip 1","SEO tip 2","SEO tip 3"]
+  },
+  "market": {
+    "yourRate": { "low": 180, "high": 280, "avg": 220 },
+    "marketAvg": { "low": 160, "high": 320, "avg": 235 },
+    "competitorRange": { "low": 140, "high": 380 },
+    "position": "slightly below market average — room to increase by 8-12%",
+    "byBedroom": [
+      { "bedrooms": 1, "marketAvg": 120, "suggested": 130 },
+      { "bedrooms": 2, "marketAvg": 175, "suggested": 190 },
+      { "bedrooms": 3, "marketAvg": 235, "suggested": 255 },
+      { "bedrooms": 4, "marketAvg": 310, "suggested": 340 },
+      { "bedrooms": 5, "marketAvg": 420, "suggested": 460 }
+    ],
+    "seasonal": [
+      { "period": "Peak Summer (Jun–Aug)", "multiplier": 1.4, "suggestedRate": 308, "notes": "Highest demand — book out 3-4 months ahead" },
+      { "period": "Spring Break (Mar–Apr)", "multiplier": 1.25, "suggestedRate": 275, "notes": "Family travel surge — 3-night minimum recommended" },
+      { "period": "Holiday Season (Nov–Dec)", "multiplier": 1.35, "suggestedRate": 297, "notes": "Thanksgiving and Christmas command premium rates" },
+      { "period": "Shoulder Season (Apr–May, Sep–Oct)", "multiplier": 0.9, "suggestedRate": 198, "notes": "Slightly reduce to maintain occupancy" },
+      { "period": "Low Season (Jan–Feb)", "multiplier": 0.7, "suggestedRate": 154, "notes": "Offer weekly discounts to fill gaps" }
+    ],
+    "occasions": [
+      { "occasion": "New Year's Eve", "premium": "2.5x", "suggestedRate": 550, "minStay": 3, "tip": "Require 3-night minimum, book 2-3 months out" },
+      { "occasion": "Super Bowl Weekend", "premium": "1.8x", "suggestedRate": 396, "minStay": 2, "tip": "If near host city, rates spike dramatically" },
+      { "occasion": "Valentine's Day", "premium": "1.4x", "suggestedRate": 308, "minStay": 2, "tip": "Couples getaway — highlight romantic amenities" },
+      { "occasion": "Memorial Day Weekend", "premium": "1.6x", "suggestedRate": 352, "minStay": 3, "tip": "First big summer weekend — price aggressively" },
+      { "occasion": "4th of July", "premium": "1.7x", "suggestedRate": 374, "minStay": 3, "tip": "Book out months in advance near any attraction" },
+      { "occasion": "Labor Day Weekend", "premium": "1.5x", "suggestedRate": 330, "minStay": 3, "tip": "Last summer hurrah — strong demand" },
+      { "occasion": "Local Festivals/Events", "premium": "1.3-2x", "suggestedRate": 286, "minStay": 2, "tip": "Monitor local event calendar and adjust dynamically" }
+    ],
+    "weekly": { "discount": "10-15%", "suggestedWeekly": 1386, "breakeven": 7, "tip": "Weekly discounts increase occupancy by 20-30% in shoulder season" },
+    "monthly": { "discount": "25-35%", "suggestedMonthly": 4620, "breakeven": 21, "tip": "Monthly stays eliminate turnover costs — great for slow months" },
+    "revenueProjection": {
+      "conservative": 28600,
+      "moderate": 38500,
+      "optimistic": 52800,
+      "topTip": "Dynamic pricing + instant book + no minimum stay in low season = 15-20% revenue boost"
+    }
   }
 }`;
 
@@ -1709,6 +1900,28 @@ function renderResults(data) {
       <div class="section-label" style="margin-bottom:14px;">SEO Tips</div>
       ${(seo?.tips||[]).map((t,i)=>`<div style="display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);font-size:0.85rem;"><span style="color:var(--gold);font-weight:700;">${i+1}.</span><span>${t}</span></div>`).join('')}
     </div>`;
+
+  // Market intel
+  if (wantMarket && data.market) renderMarket(data.market, property);
+
+  // Show/hide tabs based on selected features
+  const tabMap = { ota:'tab-ota', photos:'tab-photos', social:'tab-social', pricing:'tab-pricing', rules:'tab-rules', seo:'tab-seo', market:'tab-market', audit:'tab-audit' };
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    const tabId = btn.getAttribute('onclick').match(/'([^']+)'/)?.[1];
+    if (tabId && tabId !== 'audit') {
+      const feat = Object.keys(tabMap).find(k => tabMap[k] === 'tab-' + tabId);
+      if (feat) btn.style.display = selectedFeatures.has(feat) ? '' : 'none';
+    }
+  });
+  // Activate first visible tab
+  const firstVisible = document.querySelector('.tab-btn:not([style*="none"])');
+  if (firstVisible) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    firstVisible.classList.add('active');
+    const tabName = firstVisible.getAttribute('onclick').match(/'([^']+)'/)?.[1];
+    if (tabName) document.getElementById('tab-' + tabName)?.classList.add('active');
+  }
 
   document.getElementById('results').classList.add('active');
 }
@@ -2108,6 +2321,178 @@ function toggleMorePlatforms(btn) {
   const isOpen = grid.style.display !== 'none';
   grid.style.display = isOpen ? 'none' : 'grid';
   btn.classList.toggle('open', !isOpen);
+}
+
+
+// ─── FEATURE SELECTOR ────────────────────────────────────────────────────────
+let selectedFeatures = new Set();
+
+function toggleFeature(el, feature) {
+  if (selectedFeatures.has(feature)) {
+    selectedFeatures.delete(feature);
+    el.classList.remove('active');
+  } else {
+    selectedFeatures.add(feature);
+    el.classList.add('active');
+  }
+  updateFsCount();
+}
+
+function selectAllFeatures() {
+  selectedFeatures = new Set(['ota','photos','social','pricing','rules','seo']);
+  document.querySelectorAll('.fs-item').forEach(el => el.classList.add('active'));
+  updateFsCount();
+}
+
+function selectNoneFeatures() {
+  selectedFeatures = new Set();
+  document.querySelectorAll('.fs-item').forEach(el => el.classList.remove('active'));
+  updateFsCount();
+}
+
+function updateFsCount() {
+  const el = document.getElementById('fsCount');
+  if (el) el.textContent = selectedFeatures.size + ' of 8 selected' + (selectedFeatures.size === 0 ? ' — pick what you need' : '');
+  const btn = document.getElementById('analyzeBtn');
+  if (btn) {
+    if (selectedFeatures.size === 0) {
+      btn.textContent = 'Select features above to generate →';
+      btn.style.background = '#bbb';
+      btn.style.cursor = 'not-allowed';
+    } else {
+      const labels = { ota:'OTA Listings', photos:'Photos', social:'Social', pricing:'Pricing', rules:'Rules', seo:'SEO', market:'Market Intel', audit:'Auditor' };
+      const selected = [...selectedFeatures].map(f => labels[f]).join(' · ');
+      btn.textContent = 'Generate: ' + selected + ' →';
+      btn.style.background = '';
+      btn.style.cursor = '';
+    }
+  }
+}
+
+
+// ─── RENDER MARKET INTEL ─────────────────────────────────────────────────────
+function renderMarket(m, property) {
+  const posColor = m.position.includes('below') ? '#c9a84c' : '#5a8a62';
+  const el = document.getElementById('marketContent');
+  if (!el) return;
+
+  el.innerHTML = `
+    <!-- RATE OVERVIEW -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:28px;">
+      <div style="background:white;border:1px solid var(--border);border-radius:10px;padding:24px;text-align:center;">
+        <div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:2px;font-weight:700;color:var(--text-muted);margin-bottom:8px;">Your Current Rate</div>
+        <div style="font-size:2.4rem;font-weight:900;color:var(--ink);letter-spacing:-0.04em;">$${m.yourRate.avg}<span style="font-size:1rem;font-weight:400;color:var(--text-muted)">/night</span></div>
+        <div style="font-size:0.78rem;color:var(--text-muted);margin-top:4px;">Range: $${m.yourRate.low} – $${m.yourRate.high}</div>
+      </div>
+      <div style="background:white;border:1px solid var(--border);border-radius:10px;padding:24px;text-align:center;">
+        <div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:2px;font-weight:700;color:var(--text-muted);margin-bottom:8px;">Market Average</div>
+        <div style="font-size:2.4rem;font-weight:900;color:var(--blue);letter-spacing:-0.04em;">$${m.marketAvg.avg}<span style="font-size:1rem;font-weight:400;color:var(--text-muted)">/night</span></div>
+        <div style="font-size:0.78rem;color:var(--text-muted);margin-top:4px;">Competitors: $${m.competitorRange.low} – $${m.competitorRange.high}</div>
+      </div>
+      <div style="background:white;border:1px solid var(--border);border-radius:10px;padding:24px;text-align:center;">
+        <div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:2px;font-weight:700;color:var(--text-muted);margin-bottom:8px;">Your Position</div>
+        <div style="font-size:1rem;font-weight:700;color:${posColor};margin-top:8px;line-height:1.4;">${m.position}</div>
+      </div>
+      <div style="background:white;border:1px solid var(--border);border-radius:10px;padding:24px;text-align:center;">
+        <div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:2px;font-weight:700;color:var(--text-muted);margin-bottom:8px;">Annual Revenue Est.</div>
+        <div style="font-size:1.5rem;font-weight:900;color:var(--sage);letter-spacing:-0.03em;">$${m.revenueProjection.moderate.toLocaleString()}</div>
+        <div style="font-size:0.72rem;color:var(--text-muted);margin-top:4px;">$${m.revenueProjection.conservative.toLocaleString()} – $${m.revenueProjection.optimistic.toLocaleString()}</div>
+      </div>
+    </div>
+
+    <!-- BEDROOM COMPARISON -->
+    <div class="section-label">Market rates by bedroom count</div>
+    <div style="background:white;border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:28px;">
+      <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
+        <thead>
+          <tr style="background:var(--cream);">
+            <th style="padding:14px 20px;text-align:left;font-weight:700;font-size:0.72rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);">Bedrooms</th>
+            <th style="padding:14px 20px;text-align:center;font-weight:700;font-size:0.72rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);">Market Avg</th>
+            <th style="padding:14px 20px;text-align:center;font-weight:700;font-size:0.72rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);">Suggested for You</th>
+            <th style="padding:14px 20px;text-align:center;font-weight:700;font-size:0.72rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);">vs Market</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${(m.byBedroom||[]).map((b,i) => `
+          <tr style="border-top:1px solid var(--border);${b.bedrooms==property.bedrooms?'background:#fffdf5;':i%2===0?'':''}">
+            <td style="padding:14px 20px;font-weight:600;">${b.bedrooms} BR ${b.bedrooms==property.bedrooms?'<span style="background:var(--gold);color:white;font-size:0.65rem;padding:2px 8px;border-radius:10px;margin-left:6px;font-weight:700;">YOUR PROPERTY</span>':''}</td>
+            <td style="padding:14px 20px;text-align:center;color:var(--text-muted);">$${b.marketAvg}/night</td>
+            <td style="padding:14px 20px;text-align:center;font-weight:700;color:var(--sage);">$${b.suggested}/night</td>
+            <td style="padding:14px 20px;text-align:center;">
+              <span style="background:#e8f5e9;color:#2e7d32;font-size:0.72rem;padding:3px 10px;border-radius:10px;font-weight:700;">+${Math.round((b.suggested/b.marketAvg-1)*100)}%</span>
+            </td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- SEASONAL PRICING -->
+    <div class="section-label">Seasonal pricing strategy</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-bottom:28px;">
+      ${(m.seasonal||[]).map(s => {
+        const pct = Math.round((s.multiplier-1)*100);
+        const color = s.multiplier >= 1.3 ? '#5a8a62' : s.multiplier >= 1 ? '#c9a84c' : '#b85c3a';
+        const bg = s.multiplier >= 1.3 ? '#e8f5e9' : s.multiplier >= 1 ? '#fffde7' : '#fff5f5';
+        return `<div style="background:white;border:1px solid var(--border);border-radius:10px;padding:20px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+            <div style="font-weight:700;font-size:0.88rem;">${s.period}</div>
+            <span style="background:${bg};color:${color};font-size:0.75rem;font-weight:700;padding:3px 10px;border-radius:10px;">${pct>=0?'+':''}${pct}%</span>
+          </div>
+          <div style="font-size:1.5rem;font-weight:900;color:var(--ink);letter-spacing:-0.03em;margin-bottom:6px;">$${s.suggestedRate}<span style="font-size:0.85rem;font-weight:400;color:var(--text-muted)">/night</span></div>
+          <div style="font-size:0.78rem;color:var(--text-muted);line-height:1.5;">${s.notes}</div>
+        </div>`;
+      }).join('')}
+    </div>
+
+    <!-- OCCASIONS -->
+    <div class="section-label">Special occasion & event pricing</div>
+    <div style="background:white;border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:28px;">
+      <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
+        <thead>
+          <tr style="background:var(--ink);color:white;">
+            <th style="padding:14px 20px;text-align:left;font-weight:600;font-size:0.72rem;text-transform:uppercase;letter-spacing:1px;">Occasion</th>
+            <th style="padding:14px 20px;text-align:center;font-weight:600;font-size:0.72rem;text-transform:uppercase;letter-spacing:1px;">Premium</th>
+            <th style="padding:14px 20px;text-align:center;font-weight:600;font-size:0.72rem;text-transform:uppercase;letter-spacing:1px;">Suggested Rate</th>
+            <th style="padding:14px 20px;text-align:center;font-weight:600;font-size:0.72rem;text-transform:uppercase;letter-spacing:1px;">Min Stay</th>
+            <th style="padding:14px 20px;text-align:left;font-weight:600;font-size:0.72rem;text-transform:uppercase;letter-spacing:1px;">Tip</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${(m.occasions||[]).map((o,i) => `
+          <tr style="border-top:1px solid var(--border);${i%2===0?'':'background:var(--cream);'}">
+            <td style="padding:14px 20px;font-weight:600;">${o.occasion}</td>
+            <td style="padding:14px 20px;text-align:center;"><span style="background:#fff8e1;color:#f57f17;font-weight:700;font-size:0.82rem;padding:3px 10px;border-radius:10px;">${o.premium}</span></td>
+            <td style="padding:14px 20px;text-align:center;font-weight:700;color:var(--sage);font-size:1rem;">$${o.suggestedRate}</td>
+            <td style="padding:14px 20px;text-align:center;color:var(--text-muted);">${o.minStay} nights</td>
+            <td style="padding:14px 20px;font-size:0.8rem;color:var(--text-muted);">${o.tip}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- WEEKLY / MONTHLY -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px;">
+      <div style="background:white;border:1px solid var(--border);border-radius:10px;padding:24px;">
+        <div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:2px;font-weight:700;color:var(--text-muted);margin-bottom:12px;">📅 Weekly Stays</div>
+        <div style="font-size:2rem;font-weight:900;color:var(--ink);letter-spacing:-0.03em;margin-bottom:4px;">$${m.weekly.suggestedWeekly.toLocaleString()}<span style="font-size:0.9rem;font-weight:400;color:var(--text-muted)">/week</span></div>
+        <div style="font-size:0.82rem;color:var(--gold);font-weight:700;margin-bottom:8px;">${m.weekly.discount} discount from nightly</div>
+        <div style="font-size:0.8rem;color:var(--text-muted);line-height:1.6;">${m.weekly.tip}</div>
+      </div>
+      <div style="background:white;border:1px solid var(--border);border-radius:10px;padding:24px;">
+        <div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:2px;font-weight:700;color:var(--text-muted);margin-bottom:12px;">📆 Monthly Stays</div>
+        <div style="font-size:2rem;font-weight:900;color:var(--ink);letter-spacing:-0.03em;margin-bottom:4px;">$${m.monthly.suggestedMonthly.toLocaleString()}<span style="font-size:0.9rem;font-weight:400;color:var(--text-muted)">/month</span></div>
+        <div style="font-size:0.82rem;color:var(--gold);font-weight:700;margin-bottom:8px;">${m.monthly.discount} discount from nightly</div>
+        <div style="font-size:0.8rem;color:var(--text-muted);line-height:1.6;">${m.monthly.tip}</div>
+      </div>
+    </div>
+
+    <!-- TOP TIP -->
+    <div style="background:linear-gradient(135deg,rgba(201,168,76,0.1),rgba(201,168,76,0.03));border:1px solid rgba(201,168,76,0.3);border-radius:10px;padding:24px;">
+      <div style="font-weight:700;font-size:1rem;margin-bottom:8px;color:var(--ink);">💡 Top Revenue Tip</div>
+      <div style="font-size:0.88rem;color:var(--text-muted);line-height:1.7;">${m.revenueProjection.topTip}</div>
+      <button class="copy-btn" style="margin-top:14px;width:auto;padding:8px 20px;" onclick="navigator.clipboard.writeText(document.getElementById('marketContent').innerText).then(()=>alert('Market report copied!'))">Copy Full Report</button>
+    </div>
+  `;
 }
 
 </script>
